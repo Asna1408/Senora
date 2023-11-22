@@ -1,0 +1,67 @@
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/" rel="nofollow">Home</a>
+                <span></span> Pages
+                <span></span>Reset Password
+            </div>
+        </div>
+    </div>
+
+     <section class="pt-150 pb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 m-auto">
+                    <div class="row">
+
+
+                        <% if (typeof message !== 'undefined') { %>
+                            <div class="alert alert-danger fade show mt-3" id="message" role="alert">
+                              <%= message %>
+                            </div>
+                            <% } %>
+
+
+                        <div class="col-lg-6">
+                            <div class="login_wrap widget-taber-content p-30 background-white border-radius-5">
+                                <div class="padding_eight_all bg-white">
+                                    <div class="heading_s1">
+                                        <h3 class="mb-30">Reset Password</h3>
+                                    </div>
+                                    
+
+                                    
+                                    <div class="alert alert-danger fade show mt-3" id="error-message" role="alert" style="display: none;"></div>
+                                    <div class="pswdreset-form">
+                                    <form action="/forget" method="post">
+
+                                        <div class="form-group">
+                                            <label for="email"></label>   
+                                            <input type="email" required="" name="email" placeholder="Your Email" id="email">
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-fill-out btn-block hover-up" value="send reset link"
+                                                name="resetPswd">Reset Password</button>
+                                        </div>
+                                    </form>
+
+                                    <% if (typeof  message !== 'undefined') { %>  
+
+                                        <div class="alert alert-success fade show mt-3" id="message" role="alert">
+                                            <%- message %> 
+                                        </div>
+                                        <% } %>
+                                      
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 
+</main>
+

@@ -1,0 +1,266 @@
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/" rel="nofollow">Home</a>
+        <span></span> Shop
+        <span></span> Your Cart
+      </div>
+    </div>
+  </div>
+  <section class="mt-50 mb-50">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-12">   
+             <form action="/checkout" method="post">
+          <div class="table-responsive">
+      
+            <table class="table shopping-summery text-center clean">
+              <thead>
+                <tr class="main-heading">
+                  <th scope="col">Image</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Subtotal</th>
+                  <th scope="col">Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <% if (getallData && getallData.length> 0) { %>
+                  <% getallData[0].productDetails.forEach((product, index)=> { %>
+                    <tr>
+                      <td class="image product-thumbnail">
+                        <img src="/admin/uploads/<%= product.primaryImage[0].name %>" alt="<%= product.title %>">
+
+                      </td>
+    
+                      <td class="product-des product-name">
+                        <h5 class="product-name">
+                          <a href="/product?id=<%= product._id %>">
+                            <%= product.title %>
+                          </a>
+                        </h5>
+                        <% if (product.isDeleted) { %>
+                          <p class="text-danger">Currently Unavailable</p>
+                          <% } else if (product.quantity < getallData[0].products[index].quantity) { %>
+                            <p class="text-danger">Out of Stock</p>
+                            <% } %>
+                      </td>
+
+                      <td class="price" data-title="Price" id="">
+                        <span>₹<%= product.salePrice.toFixed(2) %></span>
+                      </td>
+
+                      <td class="text-center" data-title="Stock">
+                        <div class="detail-qty border radius m-auto">
+                          <a href="javascript:void(0);" class="qty-down minusBtn" id="minusBtn"
+                            data-product-id="<%= product._id %>">
+                            <i class="fi-rs-angle-small-down"></i>
+                          </a>
+
+                          <span class="qty-val" id="quantity_<%= product._id %>">
+                            <%= getallData[0].products[index].quantity %>
+                          </span>
+
+                          <a href="javascript:void(0);" class="qty-up plusBtn" id="plusBtn"
+                            data-product-id="<%= product._id %>">
+                            <i class="fi-rs-angle-small-up"></i>
+                          </a>
+                        </div>
+                      </td>
+
+                      <td class="text-right" data-title="Cart" id="totalProductPrice_<%= product._id %>">
+                        <% const productTotal=parseFloat(product.salePrice); %>
+                          <% const productQuantity=getallData[0].products[index].quantity; %>
+                            <% const totalProductPrice=productTotal * productQuantity; %>
+                              <%= totalProductPrice.toFixed(2) %>
+                      </td>
+
+                      <td class="action" data-title="Remove">
+                        <a href="/remove/<%= product._id %>">
+                          <i class="fi-rs-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    <% }); %>
+                      <% } else { %>
+                        <tr>
+                          <td colspan="6">No products in the cart.</td>
+                        </tr>
+                        <% } %>
+              </tbody>
+
+            </table>
+          </div>
+
+          <div class="cart-action text-end">
+            <a class="btn " href="/"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
+          </div>
+
+          <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
+
+
+          <div class="row mb-50">
+            <div class="col-lg-6 col-md-12">
+              <div class="border p-md-4 p-30 border-radius cart-totals">
+                <div class="heading_s1 mb-3">
+                  <h4>Cart Totals</h4>
+                </div>
+                <div class="table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td class="cart_total_label">Cart Subtotal</td>
+                        <td class="cart_total_amount"><span>₹ <span id="subtotal">
+                              <%= subtotal.toFixed(2) %>
+                            </span></span></td>
+                      </tr>
+                      <!-- <tr>
+                                                    <td class="cart_total_label">Shipping</td>
+                                                    <td class="cart_total_amount"> <i class="ti-gift mr-5"></i> Free Shipping</td>
+                                                </tr> -->
+                      <tr>
+                        <td class="cart_total_label">Total</td>
+                        <td class="cart_total_amount"><strong><span>₹ <span id="cart-total">
+                                <%= total.toFixed(2) %>
+                              </span></span></strong></td>
+                      </tr>
+                    </tbody>
+
+                  </table>
+                </div>
+                <% if(cartItems){ %>
+                <% if (cartItems.products.some(product=> product.product.quantity < product.quantity ) ||
+                    cartItems.products.some(product=> product.product.isDeleted)) { %>
+                    <button class="button btn-secondary cursor-na" type="submit" disabled>
+                      Proceed to checkout
+                    </button>
+                    <% } else { %>
+                      <button id="checkoutBtn" class="btn">Proceed to checkout</button>
+                      <% } %>
+                  <%  } %>
+              </div>
+            </div>
+          </div>
+
+        </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+
+  let data;
+  const checkoutBtn = document.getElementById("checkoutBtn");
+
+  function updateCartMessage(data) {
+    const cartMessage = document.getElementById("cart-message");
+
+    // Update the cart message
+    cartMessage.innerHTML = data.message;
+    cartMessage.className = `position-fixed bg-${data.status} text-white p-2 rounded`;
+    cartMessage.style.display = "block";
+
+    // Hide the cart message after 3 seconds
+    setTimeout(function () {
+      cartMessage.style.display = "none";
+    }, 3000);
+  }
+
+  function updateCartCount(data) {
+    const cartCount = document.getElementById("cartCount");
+
+    //Update the cart count (if available)
+    if (data.count !== undefined) {
+      cartCount.innerText = data.count;
+    }
+  }
+
+  function updateQuantityDisplay(id, data) {
+    const quantitySpan = document.getElementById(`quantity_${id}`);
+    const totalProductPrice = document.getElementById(
+      `totalProductPrice_${id}`
+    );
+
+    //Update the quantity displayed in the <span> element
+    if (quantitySpan) {
+      quantitySpan.innerText = data.quantity;
+      totalProductPrice.innerText = data.productTotal.toFixed(2);
+    }
+  }
+
+  function managePlusButton(data) {
+    const plusBtnDisabled = document.getElementById("plusBtnDisabled");
+    const plusBtn = document.getElementById("plusBtn");
+
+    if (data.status === "warning") {
+      plusBtnDisabled.style.pointerEvents = "all";
+    }
+  }
+
+  function updateCartTotal(data) {
+    const subTotal = document.getElementById("subtotal");
+    const cartTotal = document.getElementById("cart-total");
+    subTotal.innerText = data.subtotal;
+    cartTotal.innerText = data.total;
+  }
+
+  function updateQuantity(id, isIncrement) {
+    const action = isIncrement ? "inc" : "dec";
+    const url = `/cart/${action}/${id}`;
+
+    fetch(url, {
+      method: "GET",
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          console.error("Failed");
+        }
+      })
+      .then((responseData) => {
+        if (responseData) {
+          data = responseData;
+
+          if (data.quantity <= 0) {
+            location.reload();
+          }
+
+          updateCartMessage(data);
+
+          updateCartCount(data);
+
+          updateQuantityDisplay(id, data);
+
+          updateCartTotal(data);
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+      });
+  }
+
+  const plusButtons = document.querySelectorAll(".plusBtn");
+  const minusButtons = document.querySelectorAll(".minusBtn");
+
+  plusButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const productId = this.getAttribute("data-product-id");
+      updateQuantity(productId, true);
+    });
+  });
+
+  minusButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const productId = this.getAttribute("data-product-id");
+      updateQuantity(productId, false);
+    });
+  });
+
+</script>

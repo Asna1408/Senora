@@ -1,0 +1,108 @@
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Banner List</h2>
+        </div>
+        <div>
+            <a href="/admin/banner/newBanner" class="btn btn-primary btn-sm rounded">Create new</a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <table style="width: 100%;" id="example" class="table table-striped table-bordered table-sm" cellspacing="0"
+            width="100%">
+            <thead>
+                <tr>
+                    <th class="th-sm">Banner Image</th>
+                    <th class="th-sm">Banner Title</th>
+                    <th class="th-sm">Image URL</th>
+                    <th class="th-sm">Image Link</th>
+                    <th class="th-sm">Position</th>
+                    <th class="th-sm">Start Date</th>
+                    <th class="th-sm">End Date</th>
+                    <th class="th-sm">Status</th>
+                    <th class="th-sm">Delete/Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <% allBanner.forEach(function(banner) { %>
+                 
+                    <tr>
+                        <td>
+                        <img src="/admin/uploads/<%= banner.bannerImage[0] %>" alt="<%= banner.name %>" width="100"
+                                            class="border border-2 rounded-top">
+                        </td>
+                        <td>
+                            <%= banner.title %>
+                        </td>
+                        <td>
+                            <%= banner.imgeUrl %>
+                        </td>
+                        <td>
+                            <%= banner.linkUrl %>
+                        </td>
+                        <td>
+                            <%= banner.position %>
+                        </td>
+                        <td>
+                            <%= banner.startDate %>
+                        </td>
+                        <td>
+                            <%= banner.endDate %>
+                        </td>
+                        <td>
+                            <%= banner.status %>
+                        </td>
+                        
+                        <td>
+                            <a href="/admin/banner/editBanner/<%- banner._id %>">
+                                <button class="btn btn-info btn-sm ml-2 "><i
+                                        class="material-icons md-edit pb-1"></i></button>
+
+                            </a>
+                            <!-- <a  onclick="confirmDelete('<%= banner._id %>')"> -->
+                                <button class="btn btn-info btn-sm" onclick="confirmDelete('<%= banner._id %>')"><i
+                                    class="fas fa-trash"></i></button>
+                                        <h1><input value="<%= banner._id  %>" hidden></h1>
+                            <!-- </a> -->
+                        </td>
+
+                    </tr>
+                  
+                    <% }); %>
+            </tbody>
+        </table>
+
+    </div> 
+
+
+</section> 
+
+<script>
+    $(document).ready(function () {
+        new DataTable('#example');
+
+    })
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(bannerId) {
+        console.log("This is banner id", bannerId);
+        Swal.fire({
+            title: "Delete Banner",
+            text: "Are you sure you want to delete the Banner?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: 'Yes, remove it!',
+            cancelButtonText: 'No, cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/admin/banner/deleteBanner/" + bannerId;
+                        
+                    }
+                });
+            }
+      
+    
+</script> 
+

@@ -1,0 +1,139 @@
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+        
+        <div class="card p-2">
+            <div class="card-header bg-success text-white d-flex justify-content-between">
+                <h4 class="mb-0"><%= orderData.orderId %></h4>
+                <img style="width: 40px; height: 40px" class="rounded-5" src="" alt="" />
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-start gap-5">
+                    <div class="">
+                        <h6 class="card-subtitle mb-2 text-muted">Customer Information</h6>
+                        <p>
+                            <strong>Name:</strong> <%= userData.userName %>,   </p>
+                            <p>
+                            <strong>Email: </strong><a href="#"><%= userData.email %></a>
+                        </p>
+                        <p><strong>Address:</strong> <%= orderData.shippingAddress %>, <%= orderData.town %>, <%= orderData.state %></p>
+                        <p><strong>Phone: </strong><%= orderData.phone %></p>
+                    </div>
+                    <div class="">
+                        <h6 class="card-subtitle mb-2 text-muted">Order Information</h6>
+                        <p><strong>Payment Method:</strong> <%= orderData.payment_method %></p>
+
+                       <!-- coupan and discount -->
+                   
+                    </div>
+                    <div class="">
+                        <h6 class="card-subtitle mb-2 text-muted">Other Information</h6>
+                        <p><strong>Total Amount:</strong> <%= orderData.totalPrice %></p>
+
+                     <!-- wallet -->
+                    </div>
+                </div>
+
+                <hr class="border-1 bg-dark" />
+
+                <h6 class="card-subtitle mb-2 text-muted mt-4">Order Details</h6>
+                <!-- Product  -->
+                
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <small><%= %></small>
+                        <img
+                            src="/admin/uploads/<%= productData.primaryImage[0].name %>"
+                            alt="Product 1"
+                            class="img-fluid img-thumbnail"
+                        />
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <p><strong><%= productData.title %></strong></p>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <% if (productId.status === 'Pending') { %>
+                        <p><strong class="bg-warning text-white px-3 py-2 rounded-pill"><%= productId.status%></strong></p>
+                        <% } else if (productId.status === "Shipped") { %>
+                        <p><strong class="bg-primary text-white px-3 py-2 rounded-pill"><%= productId.status %></strong></p>
+                        <% } else if (productId.status === "Delivered") { %>
+                        <p><strong class="bg-success text-white px-3 py-2 rounded-pill"><%= productId.status %></strong></p>
+                        <% } else if (productId.status === "Cancelled") { %>
+                        <p><strong class="bg-danger text-white px-3 py-2 rounded-pill"><%= productId.status %></strong></p>
+                        <% } else if (productId.status === "Returned") { %>
+                        <p><strong class="bg-info text-white px-3 py-2 rounded-pill"><%= productId.status %></strong></p>
+                        <% } %>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <p><strong>Quantity:</strong> <%= productId.quantity %></p>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center">
+                        <p><strong>Price:</strong> <%= productId.price %></p>
+                    </div>
+ <% if (productId.status !== "Cancelled" && productId.status !== "Delivered" && productId.status !== "Return Requested"
+                    && productId.status !== "Returned") { %> 
+
+
+                        
+                     <div class="col-md-2 d-flex flex-column d-flex flex-column justify-content-center">
+                        <form action="/admin/orders/update/<%= orderData._id %>" method="POST">
+                            <select name="status" class="form-control mb-3">
+                                <% if (productId.status === "Pending") { %>
+                                    <option value="Pending" <%= productId.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                    <option value="Shipped" <%= productId.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                    <option value="Delivered" <%= productId.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                    <option value="Cancelled" <%= productId.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                <% } else if (productId.status === "Shipped") { %>
+                                    <option value="Shipped" <%= productId.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                    <option value="Delivered" <%= productId.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                    <option value="Cancelled" <%= productId.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                <% } %>
+                            </select>
+                            <button class="btn btn-sm btn-primary btn-block" type="submit">Update</button>
+                        </form>
+                    </div> 
+
+
+
+
+                    <% } else if (productId.status === "Delivered") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <img
+                            style="width: 100px; height: 100px"
+                            src="/admin/assets/imgs/icons/delivered.svg"
+                            alt="Delivered"
+                            class="icon"
+                        />
+                    </div>
+                    <% } else if (productId.status === "Cancelled") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <img
+                            style="width: 100px; height: 100px"
+                            src="/admin/assets/imgs/icons/cancelled.svg"
+                            alt="Cancelled"
+                            class="icon"
+                        />
+                    </div>
+                    <% } else if (productId.status === "Return Requested") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <form action="/admin/orders/update/<%= orderData._id %>" method="get">
+                            <button class="btn btn-danger text-white">Confirm Return</button>
+                        </form>
+                    </div>
+                    <% } else if (productId.status === "Returned") { %>
+                    <div class="col-md-2 d-flex flex-column justify-content-center">
+                        <img
+                            style="width: 100px; height: 100px"
+                            src="/admin/assets/imgs/icons/returned.svg"
+                            alt="Cancelled"
+                            class="icon"
+                        />
+                    </div>
+                    <% } %> 
+
+                </div>
+               
+                <!-- Product End -->
+            </div>
+        </div>
+    </div>
+</div>

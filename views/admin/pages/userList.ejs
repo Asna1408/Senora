@@ -1,0 +1,139 @@
+<section class="content-main">
+    <div class="container mt-4">
+        <h1>User Management</h1>
+        <!-- <div class="col-search mx-5">
+        <form class="searchform" action="/admin/user/search" method="post">
+            <div class="input-group">
+                <input list="search_terms" type="text" class="form-control" name="search" placeholder="Search a user">
+                <button class="btn btn-light bg" type="submit"> <i class="material-icons md-search"></i></button>
+            </div>
+        </form>
+    </div> -->
+        <table class="table mt-3" id="example">
+            <thead>
+                <tr>
+                    <th>Profile</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (users?.length> 0) { %>
+                    <% for (let i=0; i < users.length; i++) { %>
+                        <% if (users[i].userName==='Admin' ) { continue; } %>
+                            <tr>
+                                <td><i class="fas fa-user-circle fa-lg"></i></td>
+                                <td><%- users[i].userName %></td>
+                                <td><%- users[i].email %></td>
+                                <td>
+
+                                    <% if (users[i].isBlock) { %>
+
+                                        <form action="user/unBlockUser/<%- users[i]?._id %>" method="post">
+                                            <button type="submit"
+                                                class="btn btn-success btn-sm unblock-button">Unblock</button>
+                                        </form>
+
+                                        <% } else { %>
+
+                                            <button type="submit" class="btn btn-danger btn-sm block-button"
+                                                id="blockUserButton"
+                                                onclick="getConfirmation('<%- users[i]?._id %>')">Block</button>
+
+                                            <% } %>
+
+                                </td>
+                            </tr>
+                            <% } %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="4">
+                                            <h2>NO USERS FOUND</h2>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+            </tbody>
+        </table>
+
+
+    </div>
+
+
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel"
+        aria-hidden="true">
+        <!-- Similar structure as the Add User Modal -->
+    </div>
+</section>
+
+<!-- Include Bootstrap JS (jQuery and Popper.js required) -->
+
+
+<script>
+
+    $(document).ready(function () {
+        new DataTable('#example');
+
+    })
+</script>
+
+<!-- <script type = "text/javascript">
+        
+         function getConfirmation() {
+            var retVal = confirm("Do you want to Block this user ?");
+              if( retVal == true ) {
+                  document.write ("User wants to continue!");
+                  return true;
+               } else {
+                  document.write ("User does not want to continue!");
+                  return false;
+               }
+            }
+        
+      
+</script>
+ -->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function getConfirmation(userId) {
+
+        console.log("This is user id", userId)
+
+        Swal.fire({
+            title: "Block User ?",
+            text: "Are you sure to block",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "No, Cancel",
+            confirmButtonText: "Yes, Proceed",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/admin/user/blockUser/" + userId,
+                    method: 'post',
+                    success: (response => {
+                        if (response.message) {
+                            Swal.fire({
+                                title: "User Blocked ",
+                                text: "User Blocked Successfully",
+                                icon: "success",
+                            }).then(() => {
+                                location.reload();
+                            })
+                        } else {
+                            console.log("Error")
+                        }
+                    })
+
+                });
+            }
+        })
+    }
+
+    // res.status(200).json({ message: "Item Added Successfully" });
+
+
+</script>

@@ -1,0 +1,267 @@
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/" rel="nofollow">Home</a>
+                <span></span> Bags
+                <span></span> Abstract Print Patchwork Bag
+            </div>
+        </div>
+    </div>
+    <section class="mt-50 mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="product-detail accordion-detail">
+                        <div class="row mb-50">
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="detail-gallery">
+                                    <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                                    <!-- MAIN SLIDES -->
+                                    <div class="product-image-slider">
+
+                                        <% getalldata.primaryImage.forEach(img=>{ %>
+                                            <div><img src="/admin/uploads/<%= img.name %>"
+                                                    alt="product image"></div>
+                                            <% }) %>
+
+                                                <% getalldata.secondaryImages.forEach(img=>{ %>
+                                                    <div><img
+                                                            src="/admin/uploads/<%=img.name %>"
+                                                            alt="product image"></div>
+                                                    <% }) %>
+                                                      
+
+
+                                    </div>
+                                    <!-- THUMBNAILS -->
+                                    <div class="slider-nav-thumbnails pl-15 pr-15">
+                                        <% getalldata.primaryImage.forEach(img=>{ %>
+                                            <div><img src="/admin/uploads/<%= img.name %>" alt="product image"></div>
+                                            <% }) %>
+
+
+                                                <% getalldata.secondaryImages.forEach(img=>{ %>
+                                                    <div><img src="/admin/uploads/<%= img.name %>" alt="product image">
+                                                    </div>
+                                                    <% }) %>
+
+
+
+                                    </div>
+                                </div>
+                                <!-- End Gallery -->
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="detail-info">
+                                    <h2 class="title-detail">
+                                        <%= getalldata.title %>
+                                    </h2>
+                                    <div class="product-detail-rating">
+
+                                   <!--<div class="product-rate-cover text-end">
+                                            <div class="product-rate d-inline-block">
+                                                <div class="product-rating" >
+                                                    <span class="text-secondary"><%= `(${avgRating})` %></span>
+                                                </div>
+                                            </div>
+                                           
+                                        </div> -->
+
+                                        
+                
+
+
+                                        <div class="rating-number">
+                                            <div class="quick-view-rating">
+                                                <div class="quick-view-rating d-flex justify-content-between">
+                                                    <img src="/assets/imgs/theme/star-icon.svg" style="height: 20px; width: 20px" alt="star" />
+                                                    <span class="text-secondary"><%= `(${avgRating})` %></span>
+                                                </div>
+                                            </div>
+                                            <div class="quick-view-number">
+                                                <span><%= reviews.length %> Ratings</span>
+                                            </div>
+                                        </div>
+                    
+                    
+
+
+
+                                    </div>
+                                    <div class="clearfix product-price-cover">
+                                        <div class="product-price primary-color float-left">
+                                            <ins><span class="text-brand">$<%= getalldata.salePrice %></span></ins>
+                                            <ins><span class="old-price font-md ml-15">  $<%= getalldata.productPrice %></span></ins>
+                                          
+                                        </div>
+                                    </div>
+                                    <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                                    <div class="short-desc mb-30">
+                                        <h5>
+                                            <%= getalldata.description %>
+                                        </h5>
+                                    </div>
+                                    <div class="product_sort_info font-xs mb-30">
+                                        <ul>
+
+                                            <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 30 Day Return Policy
+                                            </li>
+                                            <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
+                                        </ul>
+                                    </div>
+                                    <!-- <div class="attr-detail attr-color mb-15">
+                                        <strong class="mr-10">Color</strong>
+                                        <ul class="list-filter color-filter">
+                                            <li><a href="#" data-color="Red"><span class="product-color-red"></span></a>
+                                            </li>
+                                            <li><a href="#" data-color="Yellow"><span
+                                                        class="product-color-yellow"></span></a></li>
+                                            <li class="active"><a href="#" data-color="White"><span
+                                                        class="product-color-white"></span></a></li>
+                                            <li><a href="#" data-color="Orange"><span
+                                                        class="product-color-orange"></span></a></li>
+                                            <li><a href="#" data-color="Cyan"><span
+                                                        class="product-color-cyan"></span></a></li>
+                                            <li><a href="#" data-color="Green"><span
+                                                        class="product-color-green"></span></a></li>
+                                            <li><a href="#" data-color="Purple"><span
+                                                        class="product-color-purple"></span></a></li>
+                                        </ul>
+                                    </div> -->
+                                    <!-- <div class="attr-detail attr-size">
+                                        <strong class="mr-10">Size</strong>
+                                        <ul class="list-filter size-filter font-small">
+                                            <li><a href="#">3</a></li>
+                                            <li class="active"><a href="#">4</a></li>
+                                            <li><a href="#">5</a></li>
+                                            <li><a href="#">6</a></li>
+                                            <li><a href="#">7</a></li>
+                                            <li><a href="#">8</a></li> 
+ 
+                                            <li><a href="#">9</a></li>
+                                            <li><a href="#">10</a></li>
+                                        </ul>
+                                    </div> -->
+                                    <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                    <div class="detail-extralink">
+                                        <div class="detail-qty border radius">
+                                            <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                            <span class="qty-val">1</span>
+                                            <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                        </div>
+                                        <div class="product-extra-link2">
+                                            <a class="btn" href ="/add/<%= getalldata._id %>">Add to cart</a>
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"><i
+                                                    class="fi-rs-heart"></i></a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- Detail Info -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-10 m-auto entry-main-content">
+                                <h2 class="section-title style-1 mb-30">Description</h2>
+                                <div class="description mb-50">
+
+
+                                    <%= getalldata.description %>
+
+                                        <ul class="product-more-infor mt-30">
+                                            <li><span>Brand</span>
+                                                <%= getalldata.brand %>
+                                            </li>
+                                            <li><span>Category</span>
+                                                <%= getalldata.categoryName %>
+                                            </li>
+                                            <li><span>Color</span>
+                                                <%= getalldata.color%>
+                                            </li>
+                                            <li><span>Size</span>
+                                                <%= getalldata.size %>
+                                            </li>
+                                            <li><span>Stock</span>
+                                                <%= getalldata.quantity %>
+                                            </li>
+
+                                        </ul>
+                                        <hr class="wp-block-separator is-style-dots">
+
+
+
+                                </div>
+
+
+                                <div class="social-icons single-share">
+                                    <ul class="text-grey-5 d-inline-block">
+                                        <li><strong class="mr-10">Share this:</strong></li>
+                                        <li class="social-facebook"><a href="#"><img
+                                                    src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a></li>
+                                        <li class="social-twitter"> <a href="#"><img
+                                                    src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a></li>
+                                        <li class="social-instagram"><a href="#"><img
+                                                    src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a></li>
+                                        <li class="social-linkedin"><a href="#"><img
+                                                    src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a></li>
+                                    </ul>
+                                </div>
+
+
+
+                                <h3 class="section-title style-1 mb-30 mt-30">Reviews</h3>
+                                <div class="comments-area style-2">
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <h4 class="mb-30">Customer questions & answers</h4>
+                                            <div class="comment-list">
+
+
+                                                <div class="single-comment justify-content-between d-flex">
+                                                    <div class="user justify-content-between d-flex">
+                                                        <div class="thumb text-center">
+                                                            <img src="assets/imgs/page/avatar-6.jpg" alt="">
+                                                            <h6><a href="#">Jacky Chan</a></h6>
+                                                            <p class="font-xxs">Since 2012</p>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <div class="product-rate d-inline-block">
+                                                                <div class="product-rating" style="width:90%">
+                                                                </div>
+                                                            </div>
+                                                            <p>Thank you very fast shipping from Poland only 3days.</p>
+                                                            <div class="d-flex justify-content-between">
+                                                                <div class="d-flex align-items-center">
+                                                                    <p class="font-xs mr-30">December 4, 2020 at 3:12 pm </p>
+                                                                    <a href="#" class="text-brand btn-reply">Reply <i class="fi-rs-arrow-right"></i> </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                               
+                                                <!--single-comment -->
+                                                
+                                                <!--single-comment -->
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                       
+                    </div>
+                </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

@@ -1,0 +1,65 @@
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/" rel="nofollow">Home</a>
+                <span></span> Pages
+                <span></span> Login
+            </div>
+        </div>
+    </div>
+    <%- include('../partials/flash.ejs') %>
+    <% if (typeof message !== 'undefined') { %>
+        <div class="alert alert-danger fade show mt-3" id="message" role="alert">
+          <%= message %>
+        </div>
+        <% } %>
+    <section class="pt-150 pb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 m-auto">
+                    <div class="row">
+                       
+                        <div class="col-lg-5">
+                            <div
+                                class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                <div class="padding_eight_all bg-white">
+
+                                    <div class="heading_s1">
+                                        <h3 class="mb-30">Login</h3>
+                                       
+                                        
+                                        <h5 class="text-danger">
+                                      </h5>
+                                     
+
+                                    </div>
+                                    <form method="post">
+                                        <div class="form-group">
+                                            <input type="text" required="" name="email" placeholder="Your Email">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required="" type="password" name="password" placeholder="Password">
+                                        </div>
+                                        <div class="login_footer form-group">
+                                            <a class="text-muted" href="/forget">Forgot password?</a>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-fill-out btn-block hover-up"
+                                                name="login">Log in</button>
+                                        </div>
+                                    </form>
+                                    
+                                      
+
+                                    <p class="text-center mb-4">Don't have account? <a href="/register">Sign up</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

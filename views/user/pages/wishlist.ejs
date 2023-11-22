@@ -1,0 +1,112 @@
+﻿
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/" rel="nofollow">Home</a>
+                    <span></span> Shop
+                    <span></span> Wishlist
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                      
+                        <div class="table-responsive">
+                            <table class="table shopping-summery text-center">
+                                <thead>
+                                    <tr class="main-heading">
+                                        <th scope="col" colspan="2">Product</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Action</th>
+                                        <th scope="col">Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <% if (getWishlistData && getWishlistData.length> 0) { %>
+                                        <% getWishlistData.forEach((product)=> { %>
+                                    
+                                    <tr>
+                                        <td class="image product-thumbnail"><img src="/admin/uploads/<%= product.productDetails[0].primaryImage[0].name %>" alt="#"></td>
+                                        <td class="product-des product-name">
+                                            <h5 class="product-name"><a href="/product?id=<%= product.productDetails[0]._id %>"><%= product.productDetails[0].title %></a></h5>
+                                            
+                                        </td>
+                                        <td class="price" data-title="Price"><span>₹<%= product.productDetails[0].salePrice%></span></td>
+                                       
+                                        <td class="text-right" data-title="Cart">
+                                            <a class="btn btn-sm"  href="/add/<%= product.productDetails[0]._id %>"><i class="fi-rs-shopping-bag mr-5"></i>Add to cart</a>
+                                        </td>
+                                        <td class="action" data-title="Remove">
+                                            <a data-mdb-toggle="tooltip" title="Remove item" onclick="removeItem('<%= product._id %>')" >
+                                                <i class="fi-rs-trash"  >
+                                                </i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="6">No products in the cart.</td>
+                                          </tr>
+                                          <% } %>
+                                    
+                                        
+                                </tbody>
+                            </table>
+                        </div>
+                      
+                            <div class="d-flex justify-content-center align-items-center">
+                                <img src="/assets/img/no-wish-list.png" alt="">
+                            </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+
+    <script>
+
+        function removeItem(productID) {
+            Swal.fire({
+                title: "Remove Item ?",
+                text: "Are You Sure You Want to Remove the Item",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Remove It!",
+                cancelButtonText: "No, Cancel",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/removeItem/" + productID,
+                        method: "GET",
+                    }).then(response => {
+                        if (response.message) {
+                            Swal.fire({
+                                title: "Prodct Removed",
+                                text: "Product Successfully Removed from Wishlist",
+                                icon: "success",
+                            }).then(() => {
+                                location.reload();
+                                console.log("Product Removed Successfully");
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Product Removed Failed",
+                                text: "Product Remove Failed.Please Try Again",
+                                icon: "warning",
+                            }).then(() => {
+                                console.log("Product Remove Failed");
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    </script>

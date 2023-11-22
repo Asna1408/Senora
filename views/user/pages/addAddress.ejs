@@ -1,0 +1,113 @@
+<div class="add-address pb-10">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
+                <form action="/addAddress" method="POST" class="address-form"  onsubmit="return validateForm()">
+                    <h3>Add Address</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="first-name">Name <span class="required">*</span></label>
+                                <input type="text" name="name" class="form-control" placeholder="Name" id="name"  />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- <div class="form-group ">
+                                <label for="addressType">Address Type:</label>
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="home" name="addressType"
+                                        value="Home" checked>
+                                    <label class="form-check-label" for="home">Home</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" id="work" name="addressType"
+                                        value="Work">
+                                    <label class="form-check-label" for="work">Work</label>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="address">Address <span class="required">*</span></label>
+                                <input type="text" name="address" class="form-control" placeholder="Street Address" id="address"
+                                     />
+                            </div>
+                        </div>
+                        <div class="col-md-6  ">
+                            <div class="form-group mt-2">
+                                <label for="city">Town / City <span class="required">*</span></label>
+                                <input type="text" name="town" class="form-control" placeholder="Town / City" id="town"
+                                     />
+                            </div>
+                        </div>
+                        <div class="col-md-6 ">
+                            <div class="form-group mt-2">
+                                <label for="state">State<span class="required">*</span></label>
+                                <input type="text" name="state" class="form-control" placeholder="State" id="state"  />
+                            </div>
+                        </div>
+                        <div class="col-md-6 ">
+                            <div class="form-group mt-2">
+                                <label for="postcode">Postcode / Zip <span class="required">*</span></label>
+                                <input type="text" name="postCode" class="form-control" id="postCode" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mt-2">
+                                <label for="phone">Phone <span class="required">*</span></label>
+                                <input type="text" name="phone" class="form-control" placeholder="Phone" id="phone"  />
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/savedAddress"><button type="submit" class="btn btn-primary my-3">Save Address</button>
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        var name = document.getElementById("name").value;
+        var address = document.getElementById("address").value;
+        var town = document.getElementById("town").value;
+        var state = document.getElementById("state").value;
+        var postCode = document.getElementById("postCode").value;
+        var phone = document.getElementById("phone").value;
+    
+        // Validate each input field
+        if (name.trim() === "") {
+            alert("Please enter a name.");
+            return false;
+        }
+    
+        if (address.trim() === "") {
+            alert("Please enter an address.");
+            return false;
+        }
+    
+        if (town.trim() === "") {
+            alert("Please enter a town/city.");
+            return false;
+        }
+    
+        if (state.trim() === "") {
+            alert("Please enter a state.");
+            return false;
+        }
+    
+        if (postCode.trim() === "") {
+            alert("Please enter a postcode/zip.");
+            return false;
+        }
+    
+        if (!phone.match(/^\d{10}$/)) {
+            alert("Please enter a valid 10-digit phone number.");
+            return false;
+        }
+    
+        // If all fields are valid, the form will be submitted
+        return true;
+    }
+    </script>
