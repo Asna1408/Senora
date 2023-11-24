@@ -81,7 +81,7 @@ userRoute.get("/singleorders", ensureAuthenticated, orderController.singleOrder)
 userRoute.put("/orders/:id", ensureAuthenticated, orderController.cancelOrder);
 userRoute.post("/orders/single/:id", ensureAuthenticated, orderController.cancelSingleOrder);
 userRoute.post("/orders/return/:id", ensureAuthenticated, orderController.returnOrder);
-
+userRoute.get("/orders/download/:id", orderController.donwloadInvoice);
 
 //<!--review routes-->
 userRoute.post("/review/add/:id", ensureAuthenticated,userController.addReview);

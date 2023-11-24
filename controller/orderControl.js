@@ -6,8 +6,13 @@ const {
     cancelSingleOrder,
     returnOrder,
     getReview,
+    generateInvoice
 } = require("../helpers/orderHelper");
 const orderItem=require("../models/orderItemModel")
+
+const pdfMake = require("pdfmake/build/pdfmake");
+const vfsFonts = require("pdfmake/build/vfs_fonts");
+
 
 /**
  * Orders Page Route
@@ -62,15 +67,12 @@ exports.cancelOrder = asyncHandler(async (req, res) => {
     }
 });
 
-/**
- * Cancel Single Order Route
- * Method PUT
- */
+//cancel single orderput---
 exports.cancelSingleOrder = asyncHandler(async (req, res) => {
     try {
         console.log(req.params.id)
         const orderItemId = req.params.id;
-        console.log(orderItemId,">>>>>>>>>>>>>>>>>>>>>>>>")
+   
 
         const result = await cancelSingleOrder(orderItemId, req.user._id);
 
@@ -84,10 +86,7 @@ exports.cancelSingleOrder = asyncHandler(async (req, res) => {
     }
 });
 
-/**
- * Return Order Requst
- * Method POST
- */
+//return orderpost--
 exports.returnOrder = asyncHandler(async (req, res) => {
     try {
         const returnOrderItemId = req.params.id;
@@ -98,6 +97,29 @@ exports.returnOrder = asyncHandler(async (req, res) => {
         } else {
             res.json(result);
         }
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+//invoice download
+exports.donwloadInvoice = asyncHandler(async (req, res) => {
+    try {
+        const orderId = req.params.id;
+console.log(orderId)
+        const data = await generateInvoice(orderId);
+        pdfMake.vfs = vfsFonts.pdfMake.vfs;
+
+        // Create a PDF document
+        const pdfDoc = pdfMake.createPdf(data);
+
+        // Generate the PDF and send it as a response
+        pdfDoc.getBuffer((buffer) => {
+            res.setHeader("Content-Type", "application/pdf");
+            res.setHeader("Content-Disposition", `attachment; filename=invoices.pdf`);
+
+            res.end(buffer);
+        });
     } catch (error) {
         throw new Error(error);
     }
