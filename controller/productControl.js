@@ -204,27 +204,26 @@ const updateProduct = expressHandler(async (req, res) => {
     } catch (error) {
         throw new Error(error)
     }  
-})
+}) 
 
 
 
-const deleteImage = expressHandler(async(req,res)=>{
-    try{
-        const id = req.params.id;
-        const existingProduct = await Product.findById(id);
-        const imageid = req.params.imageid;
-        if(imageid){
-                existingProduct.secondaryImages.forEach(image=>{
-                    if(image._id==imageid){
-                        fs.unlink(image.path)
-                        console.log('clicked')
-                    }
-                })
-            }
 
-    }catch (error) {
-        throw new Error(error)
-    }  
+const deleteImage =  expressHandler(async(req, res) => {
+    let secondaryImages = await Product.findOne({ _id: req.params.productId }, { _id: 0, secondaryImages: 1 })
+    let secondImages = secondaryImages.secondaryImages
+    let imageToDelete = req.params.imageName
+
+    const updatedImages = secondImages.filter(
+        (image) => image.name !== imageToDelete
+    );
+
+    await Product.updateOne({ _id: req.params.productId }, { $set: { secondaryImages: updatedImages } })
+        .then(() => res.redirect('back'))
+        .catch((err) => {
+            console.log(err).send("image deleted")
+            res.status(400).send("invalid request")
+        })
 })
 
 

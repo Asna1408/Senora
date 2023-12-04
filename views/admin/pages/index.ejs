@@ -1,3 +1,240 @@
-<section class="content-main">
+<div class="input-group mb-3">
+
+</div>
+
+<!-- //flash  -->
+<% if (locals.messages) { %>
+    <% Object.keys(messages).forEach((key) => { %>
+      <% messages[key].forEach((message) => { %>
+        <div class="alert alert-danger alert-dismissible fade show" id="flash-message" role="alert">
+          <strong><%= key === "danger" ? "Error" : key %>!</strong> <%= message %>.
+        </div>
+      <% }) %>
+    <% }) %>
+  <% } %>
+
+
+
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <div class="card text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Sales</h5>
+                    <p class="card-text text-dark">
+                        Total Sales Amount: <br />
+                        <span class="text-success h3">₹ <%= totalSalesAmount %></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="card text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Users</h5>
+                    <p class="card-text text-dark">
+                        Users Count: <br />
+                        <span class="text-primary h3">
+                            <%= totalActiveUserCount %>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Total Orders</h5>
+                    <p class="card-text text-dark">
+                        Total Orders Count: <br />
+                        <span class="text-success h3">
+                            <%= totalOrderCount %>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  Row 1 -->
+    <div class="row" >
+        <!-- Graph -->
+        
+        <div class="col-lg-8">
+            <div class="col-xl-12 col-lg-12">
+              <div class="card mb-4" >
+                <article class="card-body">
+                  <h5 class="card-title">Sale statistics</h5>
+                  <div>
+                    <canvas id="saleChart" height="100px"></canvas>
+                  </div>
+                  <div class="graph-options ml-3">
+                    <button
+                      id="monthlyBtn"
+                      class="btn btn-white shadow border btn-sm mt-2"
+                    >
+                      Monthly
+                    </button>
+                    <button id="weeklyBtn" class="btn  btn-white shadow border btn-sm mt-2">Weekly</button>
+                    <button
+                      id="yearlyBtn"
+                      class="btn btn-white shadow border btn-sm mt-2"
+                    >
+                      Yearly
+                    </button>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        <!-- Graph End -->
+        <div class="col-lg-4 d-flex align-items-stretch ">
+            <div class="card w-100" >
+                <div class="card-body p-4 " >
+                    <div class="mb-4 d-flex justify-content-between">
+                        <h5 class="mb-0">Recent Sales</h5>
+                        <a href="/admin/orders" class="">View All</a>
+                    </div>
+                    <div class="card-body">
+                        <% recentOrders.forEach(order=> { %>
+                            <div class="media mb-3">
+                                <img src="<%= order?.user?.image || "/assets/imgs/page/avaz.png" %>"
+                                    class="mr-3 rounded-circle" alt="User Image" style="width: 60px" />
+                                <div class="media-body">
+                                    <h5 class="mt-0">
+                                        <%= order?.user?.firstName %>
+                                    </h5>
+                                    <small>
+                                        <% var orderedMoment=moment(order.orderedDate); var now=moment(); if
+                                            (now.diff(orderedMoment, 'minutes' ) < 1) { %> Just now <% } else { %>
+                                                <%= orderedMoment.fromNow() %>
+                                                    <% } %>
+                                    </small>
+                                </div>
+                                <p class="mb-0 text-success">₹ <%= order?.totalPrice?.toFixed(2) %>
+                                </p>
+                            </div>
+                            <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+    if ($("#saleChart").length) {
+      var saleCtx = document.getElementById("saleChart").getContext("2d");
+      var saleChart;
+      var filter = 'year';
+
+      function updateChart(salesData) {
+        if (saleChart) {
+          saleChart.destroy();
+        }
+
+        var chartLabels = salesData.map((item) =>
+          // isYear ? item.year : item.month
+          filter === "year" ? item.year : filter === "month" ? item.month : item.week
+        );
+        var salesValues = salesData.map((item) => item.sales);
+
+        saleChart = new Chart(saleCtx, {
+          type: "bar",
+          data: {
+            labels: chartLabels,
+            datasets: [
+              {
+                label: "Sales",
+                tension: 0.3,
+                fill: true,
+                backgroundColor: "rgba(44, 120, 220, 0.2)",
+                borderColor: "rgba(44, 120, 220)",
+                data: salesValues,
+              },
+            ],
+          },
+          options: {
+            plugins: {
+              legend: {
+                labels: {
+                  usePointStyle: true,
+                },
+              },
+            },
+          },
+        });
+      }
+
+      function fetchSalesData(endpoint) {
+        fetch(endpoint)
+          .then((response) => response.json())
+          .then((data) => {
+            updateChart(data);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+      }
+
+      // Initial fetch for monthly sales data
+      filter = "month"
+      fetchSalesData("/admin/sales-data"); // Assuming this fetches monthly sales data
+
+      // Monthly button click event
+      document
+        .getElementById("monthlyBtn")
+        .addEventListener("click", function () {
+          filter = "month";
+          fetchSalesData("/admin/sales-data"); // Fetch monthly sales data on button click
+        });
+
+      // Yearly button click event
+      document
+        .getElementById("yearlyBtn")
+        .addEventListener("click", function () {
+          filter = "year";
+          fetchSalesData("/admin/sales-data/yearly"); // Fetch yearly sales data on button click
+        });
+
+         // Yearly button click event
+      document
+        .getElementById("weeklyBtn")
+        .addEventListener("click", function () {
+          filter = "week";
+          fetchSalesData("/admin/sales-data/weekly"); // Fetch yearly sales data on button click
+        });
+    }
+  });
+</script>
+
+<style>
+    .alert {
+        width: 46%;
+    margin: auto;
+    margin-top: 37px;
+    margin-bottom: -72px;
+}
+
+/* This will apply when the screen's width is 600px or less */
+@media (max-width: 600px) {
+  .alert {
+    width: 100%;
+  }
+}
+
+</style>
+<script>
+      setTimeout(function() {
+        var alertElements = document.querySelectorAll('.alert');
+        alertElements.forEach(function(alertElement) {
+          alertElement.style.display = 'none';
+        });
+      }, 3000);
+    </script>
+  
+  
     
-</section>

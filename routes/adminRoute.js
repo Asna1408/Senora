@@ -57,8 +57,8 @@ adminRoute.post('/product/editproduct/:id',
         { name: "secondaryImage",maxCount:10 }
         ,{ name: "primaryImage",maxCount:3 }]),
     productController.updateProduct)
-adminRoute.post('/product/deleteproductimage',isAdminLoggedIn,productController.deleteImage)    
-   
+adminRoute.post('/deleteImage/:productId/:imageName',isAdminLoggedIn , productController. deleteImage)
+
 // OrderManagement--
 adminRoute.get("/orders", adminController.ordersPage);
 adminRoute.get("/orders/:id", adminController.editOrder);
@@ -81,6 +81,12 @@ adminRoute.get('/banner/editBanner/:bannerId', BannerController.bannerEdit_get);
 adminRoute.post('/banner/editBanner', upload.fields([{ name: 'bannerImage' }]), BannerController.bannerEdit_post);
 adminRoute.get('/banner/deleteBanner/:id', BannerController.bannerDelete_get)
 
+//<!--salesReport Mangement-->
+adminRoute.get("/salesreport", adminController.salesReportpage);
+adminRoute.get("/sales-data/weekly", adminController.getSalesDataWeekly);
+adminRoute.get("/sales-data/yearly", adminController.getSalesDataYearly);
+adminRoute.get("/sales-data", adminController.getSalesData);
+adminRoute.get("/get/sales-report", adminController.generateSalesReport);
 
 
 adminRoute.get('*', (req, res) => { res.render('./admin/page404', { title: 'Error' }) })

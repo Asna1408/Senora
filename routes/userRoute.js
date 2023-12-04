@@ -90,7 +90,7 @@ userRoute.post("/review/add/:id", ensureAuthenticated,userController.addReview);
 //<!--wishlist routes-->
 userRoute.get('/wishlist', ensureAuthenticated,userController.wishlistpage);
 userRoute.get('/my-wishlist/:productID', ensureAuthenticated, userController.userWishlist_add );
-userRoute.get('/removeItem/:productID', ensureAuthenticated,userController.wishlistDelete_get)
+userRoute.get('/removeItem/:productID', ensureAuthenticated,userController.wishlistDelete_get);
 
 
 //<!--profile routes-->
@@ -98,7 +98,7 @@ userRoute.post('/edit-profile', ensureAuthenticated,userController. editProfileP
 userRoute.put('/editpsw', ensureAuthenticated, userController.UpdatePassword);
 userRoute.get('/forget',ensureNotAuthenticated,userController.forgetLoad)
 userRoute.post('/forget', ensureNotAuthenticated,userController.forgetpswd)
-userRoute.get('/forget-password',ensureNotAuthenticated,userController.forgetPswdload)
+userRoute.get('/forget-password',ensureNotAuthenticated,userController.forgetPswdload);
 userRoute.post('/forget-password',ensureNotAuthenticated, userController.resetPswd)
 
 

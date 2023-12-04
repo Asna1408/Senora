@@ -14,26 +14,26 @@
                 <div class="col-lg-9">
                     <div class="shop-product-fillter">
                         <div class="totall-product">
-                            <p> We found <strong class="text-brand">688</strong> items for you!</p>
+                            <!-- <p> We found <strong class="text-brand">688</strong> items for you!</p> -->
                         </div>
                         <div class="sort-by-product-area">
                             <div class="sort-by-cover mr-10">
-                                <div class="sort-by-product-wrap">
-                                    <div class="sort-by">
+                            <!-- <div class="sort-by-product-wrap">
+                                     <div class="sort-by">
                                         <span><i class="fi-rs-apps"></i>Show:</span>
                                     </div>
                                     <div class="sort-by-dropdown-wrap">
                                         <span> 50 <i class="fi-rs-angle-small-down"></i></span>
-                                    </div>
+                                    </div> 
                                 </div>
                                 <div class="sort-by-dropdown">
-                                    <ul>
+                                     <ul>
                                         <li><a class="active" href="#">50</a></li>
                                         <li><a href="#">100</a></li>
                                         <li><a href="#">150</a></li>
                                         <li><a href="#">200</a></li>
                                         <li><a href="#">All</a></li>
-                                    </ul>
+                                    </ul> 
                                 </div>
                             </div>
                             <div class="sort-by-cover">
@@ -43,7 +43,7 @@
                                     </div>
                                     <div class="sort-by-dropdown-wrap">
                                         <span> Featured <i class="fi-rs-angle-small-down"></i></span>
-                                    </div>
+                                    </div> 
                                 </div>
                                 <div class="sort-by-dropdown">
                                     <ul>
@@ -53,7 +53,7 @@
                                         <li><a href="#">Release Date</a></li>
                                         <li><a href="#">Avg. Rating</a></li>
                                     </ul>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -97,14 +97,24 @@
                                     <h2><a href="/product?id=<%= getalldata[i]._id %>">
                                         <%= getalldata[i].title %>
                                     </a></h2>
-                                    <div class="rating-result" title="90%">
+                                    <!-- <div class="rating-result" title="90%">
                                         <span>
                                             <span>50%</span>
                                         </span>
-                                    </div>
+                                    </div> -->
                                     <div class="product-price">
-                                        <span>$<%= getalldata[i].productPrice %></span>
-                                        <span class="old-price">$<%= getalldata[i].salePrice %></span>
+
+                                        <span><% if (getalldata[i].productPrice !==getalldata[i].salePrice) { %> 
+
+                                        $<%= getalldata[i].salePrice %>
+                                       
+
+                                      <% } %></span>
+                                      <span class="old-price"> $<%= getalldata[i].productPrice %>
+                                    <% if (getalldata[i].productPrice !==getalldata[i].salePrice) { %> 
+                                        
+                                           <% } %> </span>
+
                                     </div>
                                     <div class="product-action-1 show">
                                         <% if(user){ %>
@@ -125,7 +135,7 @@
                         
                     </div>
                     <!--pagination-->
-                    <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
+                    <!-- <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-start">
                                 <li class="page-item active"><a class="page-link" href="#">01</a></li>
@@ -136,7 +146,7 @@
                                 <li class="page-item"><a class="page-link" href="#"><i class="fi-rs-angle-double-small-right"></i></a></li>
                             </ul>
                         </nav>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-lg-3 primary-sidebar sticky-sidebar">
                     <div class="row">
@@ -146,10 +156,19 @@
                     <div class="widget-category mb-30">
                         <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
                         <ul class="categories">
-                            <li><a href="shop-grid-right.html">Shoes</a></li>
-                            <li><a href="shop-grid-right.html">Bags</a></li>
-                            <li><a href="shop-grid-right.html">Sandals</a></li>
-                            
+                            <% if (category.length>0) { %>
+                                <% category.forEach(element=> { %>
+                                    <li><a href="/shop?p=<%= currentPage %>&category=<%= element.categoryName %>" 
+                                        <% if (selectedCategory && selectedCategory.length>0) { %>
+                                            class="<%= selectedCategory.includes(element._id) ? 'text-dark' : '' %>"
+                                                <% } %>>
+                                                    <%= element.categoryName %>
+                                        </a></li>
+                                    <% }); %>
+
+                                        <% } else { %>
+                                            <h3>NO CATEGORIES</h3>
+                                            <% } %>
                         </ul>
                     </div>
                     <!-- Fillter By Price -->
@@ -168,7 +187,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="list-group">
+                        <!-- <div class="list-group">
                             <div class="list-group-item mb-10 mt-10">
                                 <label class="fw-900">Color</label>
                                 <div class="custome-checkbox">
@@ -183,7 +202,7 @@
                                 </div>
                                 
                             </div>
-                        </div>
+                        </div> -->
                         <a href="shop-grid-right.html" class="btn btn-sm btn-default"><i class="fi-rs-filter mr-5"></i> Fillter</a>
                     </div>
                 </div>
@@ -191,3 +210,6 @@
         </div>
     </section>
 </main>
+
+
+<script src="/assets/js/user/shopping.js"></script>

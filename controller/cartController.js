@@ -39,7 +39,7 @@ const cartpage = asyncHandler(async (req, res) => {
                     from: 'products',
                     localField: 'products.product',
                     foreignField: '_id',
-                    as: "productDetails",
+                    as: "productDetails", 
                 }
             }
         ]);

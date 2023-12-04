@@ -20,17 +20,17 @@
                                     <!-- MAIN SLIDES -->
                                     <div class="product-image-slider">
 
-                                        <% getalldata.primaryImage.forEach(img=>{ %>
-                                            <div><img src="/admin/uploads/<%= img.name %>"
-                                                    alt="product image"></div>
-                                            <% }) %>
+                                            <% getalldata.primaryImage.forEach(img=>{ %>
+                                                <div><img src="/admin/uploads/<%= img.name %>"
+                                                        alt="product image"></div>
+                                                <% }) %>
 
-                                                <% getalldata.secondaryImages.forEach(img=>{ %>
-                                                    <div><img
-                                                            src="/admin/uploads/<%=img.name %>"
-                                                            alt="product image"></div>
-                                                    <% }) %>
-                                                      
+                                                    <% getalldata.secondaryImages.forEach(img=>{ %>
+                                                        <div><img
+                                                                src="/admin/uploads/<%=img.name %>"
+                                                                alt="product image"></div>
+                                                        <% }) %>
+                                                        
 
 
                                     </div>
@@ -67,9 +67,20 @@
                                             </div>
                                            
                                         </div> -->
-
+                                        <div class="product-details-cati-tag mt-35">
+                                            <ul>
+                                                <li class="categories-title">Category :<%= getalldata.categoryName.categoryName %></li>
+                                                
+                                                    <% if (getalldata.productPrice !== getalldata.salePrice) { %>
+                                                        <li class="d-inline-block text-success ">
+                                                            <strong>
+                                                                <%= getalldata.categoryName.description %>
+                                                            </strong>
+                                                        </li>
+                                                        <% } %>
+                                            </ul>
+                                        </div>
                                         
-                
 
 
                                         <div class="rating-number">
@@ -84,18 +95,30 @@
                                             </div>
                                         </div>
                     
-                    
+                                       
+                
 
 
 
                                     </div>
                                     <div class="clearfix product-price-cover">
-                                        <div class="product-price primary-color float-left">
-                                            <ins><span class="text-brand">$<%= getalldata.salePrice %></span></ins>
-                                            <ins><span class="old-price font-md ml-15">  $<%= getalldata.productPrice %></span></ins>
-                                          
-                                        </div>
+
+                                        <% if (getalldata.productPrice !==getalldata.salePrice) { %>
+                                            <div class="product-price primary-color float-left">
+                                                <ins><span class="text-brand">₹<%= getalldata.salePrice %></span></ins>
+                                                <ins> <span class="old-price font-md ml-15">₹<%= getalldata.productPrice %>
+                                                            </span>  <% } %></ins>
+    
+                                            </div>
+
+
+
+
+
                                     </div>
+
+
+                                    
                                     <div class="bt-1 border-color-1 mt-15 mb-15"></div>
                                     <div class="short-desc mb-30">
                                         <h5>
@@ -110,6 +133,10 @@
                                             <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
                                         </ul>
                                     </div>
+
+                                    
+
+
                                     <!-- <div class="attr-detail attr-color mb-15">
                                         <strong class="mr-10">Color</strong>
                                         <ul class="list-filter color-filter">
@@ -174,7 +201,7 @@
                                                 <%= getalldata.brand %>
                                             </li>
                                             <li><span>Category</span>
-                                                <%= getalldata.categoryName %>
+                                                <%= getalldata.categoryName.categoryName %>
                                             </li>
                                             <li><span>Color</span>
                                                 <%= getalldata.color%>

@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
+<section class="main-content pt-5 pb-5 mb-5">
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -14,13 +14,36 @@
                             <input type="text" class="form-control" name="updatedName" id="categoryName"
                                 value="<%= values.categoryName %>" placeholder="Enter category name" required>
                         </div>
-                        
+                        <label for="categoryName" class="mt-2">Offer Percentage:</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="Offer" name="offer"
+                                    value="<%= values.offer ? values.offer:'' %>">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                            <label for="startDate" class="mt-2">Start Date:</label>
+                            <input type="date" class="form-control" id="startDate" name="startDate"
+                                value="<%= values.startDate ? values.startDate.toISOString().split('T')[0] : '' %>">
 
-                        <button type="submit" class="btn btn-primary">Update Category</button>
+                            <label for="endDate" class="mt-2">End Date:</label>
+                            <input type="date" class="form-control" id="endDate" name="endDate"
+                                value="<%= values.endDate ? values.endDate.toISOString().split('T')[0] :'' %>">
+
+                                <label for="description" class="mt-2">Description:</label>
+                                <textarea class="form-control" id="description" rows="1"
+                                    name="description"><%= values.description ? values.description:'' %></textarea>
+<br>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Update Category</button>
+                                    </div>
+                            
                     </form>
+
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-   
+</section>

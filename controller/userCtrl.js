@@ -2,6 +2,7 @@ const User = require('../models/usermodel')
 const asyncHandler = require('express-async-handler')
 const Product = require('../models/productModel')
 const Wishlist = require('../models/wishlistModel')
+const Category = require('../models/categoryModel')
 const { sendOtp } = require('../utility/nodeMailer')
 const bcrypt = require('bcrypt');
 const validateID = require('express-validator');
@@ -12,6 +13,7 @@ const { sendVerifymail } = require('../utility/nodeMailer')
 const Wallet = require('../models/walletModel')
 const WalletTransaction = require("../models/walletTransactionModel");
 const Review = require('../models/reviewModel')
+const Banner = require('../models/BannerModel')
 
 
 
@@ -30,7 +32,8 @@ const securePassword = async(password)=>{
 const loadLandingPage = async (req, res) => {
     try {
         const getalldata = await Product.find().populate("categoryName");
-        res.render('./user/pages/index', { getalldata })
+        const allBanner = await Banner.find();
+        res.render('./user/pages/index', { getalldata,allBanner })
 
     } catch (error) {
         throw new Error(error)
@@ -211,15 +214,134 @@ const userLogout = async (req, res) => {
 
 
 // loading shop page---
-const loadShop = async (req, res) => {
-    try {
-       const getalldata = await Product.find().populate("categoryName")
+// const loadShop = async (req, res) => {
+//     try {
+//        const getalldata = await Product.find().populate("categoryName")
     
-        res.render('./user/pages/shop',{getalldata})
-    } catch (error) {
-        throw new Error(error)
-    }
+//         res.render('./user/pages/shop',{getalldata})
+//     } catch (error) {
+//         throw new Error(error)
+//     }
+// }
+
+const loadShop = asyncHandler(async (req, res) => {
+    console.log('request from unauth user ');
+    try {
+        const user = req.user;
+        const page = req.query.p || 1;
+        const limit = 6;
+
+
+
+        const listedCategories = await Category.find({ isListed: true });
+        const categoryMapping = {};
+
+        listedCategories.forEach(category => {
+            categoryMapping[category.categoryName] = category._id;
+        });
+        const filter = { isListed: true };
+        let cat = '6528e157b4fe45ab5e23b889'
+        if (req.query.category) {
+            console.log(0);
+            // Check if the category name exists in the mapping
+            if (categoryMapping.hasOwnProperty(req.query.category)) {
+                filter.categoryName = categoryMapping[req.query.category];
+            } else {
+                filter.categoryName = cat
+            }
+        }
+
+        // Check if a search query is provided
+        if (req.query.search) {
+            filter.$or = [
+                { title: { $regex: req.query.search, $options: 'i' } },
+                
+            ];
+            // if search and category both included in the query parameters 
+            if (req.query.search && req.query.category) {
+                if (categoryMapping.hasOwnProperty(req.query.category)) {
+                    filter.categoryName = categoryMapping[req.query.category];
+                } else {
+                    filter.categoryName = cat
+                }
+            }
+        }
+
+        let sortCriteria = {};
+
+// Check for price sorting
+if (req.query.sort === 'lowtoHigh') {
+    
+
+    sortCriteria.salePrice = 1;
+} else if (req.query.sort === 'highToLow') {
+    sortCriteria.salePrice = -1;
 }
+        
+
+        //filter by both category and price
+        if (req.query.category && req.query.sort) {
+            console.log(2);
+            if (categoryMapping.hasOwnProperty(req.query.category)) {
+                filter.categoryName = categoryMapping[req.query.category];
+            } else {
+                filter.categoryName = cat
+            }
+
+            if (req.query.sort) {
+                sortCriteria.salePrice = 1;
+            }
+            if (req.query.sort === 'highToLow') {
+                sortCriteria.salePrice = -1;
+            }
+        }
+
+
+        const findProducts = await Product.find(filter).populate('primaryImage')
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .sort(sortCriteria);
+
+        let userWishlist;
+        let cartProductIds;
+        if (user) {
+            if (user.cart || user.wishlist) {
+                cartProductIds = user.cart.map(cartItem => cartItem.product.toString());
+                userWishlist = user.wishlist;
+            }
+
+        } else {
+            cartProductIds = null;
+            userWishlist = false;
+        }
+
+        const count = await Product.find(filter)
+            // { categoryName: { $in: listedCategoryIds }, isListed: true })
+            .countDocuments();
+        let selectedCategory = [];
+        if (filter.categoryName) {
+            selectedCategory.push(filter.categoryName)
+        }
+        console.log('selected cat', selectedCategory);
+ const getalldata = await Product.find().populate("categoryName")
+
+        res.render('./user/pages/shop', {
+            products: findProducts,
+            category: listedCategories,
+            cartProductIds,
+            user,
+            userWishlist,
+            currentPage: page,
+            totalPages: Math.ceil(count / limit), // Calculating total pages
+            selectedCategory, 
+            getalldata
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+
 // loading about page---
 const loadAbout = async (req, res) => {
     try {
@@ -275,9 +397,8 @@ const loadProduct = async (req, res) => {
         } else {
             avgRating = 0;
         }
-        const getalldata = await Product.findOne({ _id: id })
+        const getalldata = await Product.findOne({ _id: id }).populate("categoryName");
         
-       
         res.render('./user/pages/product', { getalldata: getalldata ,reviews, avgRating});
     } catch (error) {
         throw new Error(error)

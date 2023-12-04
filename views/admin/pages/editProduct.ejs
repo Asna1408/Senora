@@ -130,7 +130,10 @@
                                             
                                             <img src="/admin/uploads/<%= image?.name %>" class="max-size-image mb-3"
                                             alt="<%= image.name %>">
-                                            <button onclick="window.location.href='/admin/product/deleteproductimage?imageid=<%=image._id%>'">X</button>
+                                            <button type="button" class="btn btn-sm btn-danger ms-1 mt-4 w-25 deleteImage"
+                                            data-product-id="<%=product._id%>"
+                                            data-image-name="<%=image.name%>">x 
+                                        </button>
                                             <% }); %>
                                             <input type="file" accept=".jpg,.jpeg,.png,.webp,.svg"
                                                 class="form-control FilUploader" name="secondaryImage"
@@ -152,3 +155,35 @@
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var deleteBtn = document.querySelectorAll('.deleteImage')
+
+    deleteBtn.forEach(async (button) => {
+        button.addEventListener('click', async (e) => {
+            console.log("Image delete button clicked");
+            try {
+                let imageName = button.getAttribute('data-image-name'); // Use 'button' instead of 'this'
+                let productId = button.getAttribute('data-product-id'); // Use 'button' instead of 'this'
+                let image = button.previousElementSibling;
+
+                const response = await fetch(`/admin/deleteImage/${productId}/${imageName}`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ productId }), // Pass an object with productId
+                });
+
+                if (response.status === 200) {
+                    image.style.display = 'none';
+                    button.style.display = 'none';
+                } else {
+                    console.log("Failed to delete image");
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        });
+    });
+
+</script>

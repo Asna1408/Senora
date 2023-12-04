@@ -306,9 +306,21 @@ console.log(orders,"hlooo")
                         },
                         {
                             width: "*",
+
+
+                            // text: [
+                            //     { text: "Payment Information:", style: "subheader" },
+                            //     `Payment Method: ${orders.payment_method}\nPayment Status: ${order.isPaid}\n
+                            //     Wallet Payment: ₹${orders.wallet}`
+                            //     ,
+                            // ],
+
+
+
                             text: [
                                 { text: "Payment Information:", style: "subheader" },
-                                `Payment Method: ${orders.payment_method}\nPayment Status: ${order.isPaid}\nWallet Payment: ₹${orders.wallet}`,
+                                `Payment Method: ${orders.payment_method}\nPayment Status: ${order.isPaid}`
+                               
                             ],
                         },
                     ],
