@@ -43,48 +43,8 @@ const newBanner_get = (req, res) => {
 
 
 
-// const newBanner_post = async (req, res) => {
-
-//     console.log("Inside New Banner Post");
-
-//     try {
-//         const { banner_title, banner_url, banner_link, banner_position, banner_category, banner_status, start_date, end_date } = req.body;
-
-//         const bannerImages = req.files;
-        
-//         console.log(req.files.bannerImage)
-
-//         //here it only takes second postion image(which is the cropped image )
-//         const bannerImageNames = bannerImages ? bannerImages.bannerImage[0].filename : "";
-
-//         const newBanner = new Banner({
-//             title: banner_title,
-//             imageUrl: banner_url,
-//             linkUrl: banner_link,
-//             bannerImage: bannerImageNames,
-//             position: banner_position,
-//             category: banner_category,
-//             status: banner_status,
-//             startDate: start_date,
-//             endDate: end_date,
-//             createdDate: start_date,
-//         });
-
-//         const savedProduct = await newBanner.save();
-
-//         if (savedProduct) {
-//             return res.redirect('/admin/banner')
-       
-//         }
-//     } catch (error) {
-//         console.error(error.message);
-//         res.status(500).json({ error:error.message });
-//     }
-// }
-
-
-
 const newBanner_post = async (req, res) => {
+
     console.log("Inside New Banner Post");
 
     try {
@@ -97,11 +57,6 @@ const newBanner_post = async (req, res) => {
         //here it only takes second postion image(which is the cropped image )
         const bannerImageNames = bannerImages ? bannerImages.bannerImage[0].filename : "";
 
-        let endDate;
-        if (end_date) {
-            endDate = end_date;
-        }
-
         const newBanner = new Banner({
             title: banner_title,
             imageUrl: banner_url,
@@ -111,20 +66,22 @@ const newBanner_post = async (req, res) => {
             category: banner_category,
             status: banner_status,
             startDate: start_date,
-            endDate: endDate, // Set endDate only if provided
+            endDate: end_date,
             createdDate: start_date,
         });
 
         const savedProduct = await newBanner.save();
 
         if (savedProduct) {
-            return res.redirect('/admin/banner');
+            return res.redirect('/admin/banner')
+       
         }
     } catch (error) {
         console.error(error.message);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error:error.message });
     }
 }
+
 
 
 

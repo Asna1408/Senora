@@ -5,6 +5,8 @@ const categoryController = require('../controller/categoryControl')
 const productController = require('../controller/productControl')
 const BannerController = require('../controller/bannerController')
 
+
+
 const { upload } = require('../config/upload')
 const { isAdminLoggedIn, isAdminLoggedOut } = require('../middlewares/adminAuth')
 const nocache = require('nocache')
@@ -38,7 +40,6 @@ adminRoute.get('/category/unList/:id', isAdminLoggedIn, categoryController.unLis
 adminRoute.get('/editCategory/:id', isAdminLoggedIn, categoryController.editCategory)
 adminRoute.post('/editCategory/:id', isAdminLoggedIn, categoryController.updateCategory)
 adminRoute.post('/category/search', isAdminLoggedIn, categoryController.searchCategory)
-
 
 // // Product Management---
 adminRoute.get('/product/addProduct', isAdminLoggedIn, productController.addProduct)

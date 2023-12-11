@@ -14,7 +14,7 @@ const Wallet = require('../models/walletModel')
 const WalletTransaction = require("../models/walletTransactionModel");
 const Review = require('../models/reviewModel')
 const Banner = require('../models/BannerModel')
-
+const { generateReferralCode, creditforRefferedUser, creditforNewUser } = require('../helpers/referralHelper')
 
 
 const securePassword = async(password)=>{
@@ -64,7 +64,9 @@ const insertUser = async (req, res) => {
                 email: req.body.email,
                 password: req.body.password,
             };
-
+            if (req.body.referralCode !== '') {
+                UserData.referralCode = req.body.referralCode
+            }
             const OTP = generateOTP() /** otp generating **/
 
             req.session.otpUser = { ...UserData, otp: OTP };
@@ -110,9 +112,39 @@ const verifyOTP = asyncHandler(async (req, res) => {
         const user = req.session.otpUser;
 
         if (enteredOTP == storedOTP) {
+
+            let userFound = null;
+            if (user.referralCode && user.referralCode !== '') {
+                const referralCode = user.referralCode.trim()
+                userFound = await creditforRefferedUser(referralCode)
+                delete user.referralCode
+            }
+
             const newUser = await User.create(user);
 
+            if (newUser) {
+                const referalCode = generateReferralCode(8)
+
+                const createWallet = await Wallet.create({ user: newUser._id })
+                
+
+                newUser.wallet = createWallet._id
+                newUser.referralCode = referalCode;
+                newUser.save();
+                
+                if (userFound) {
+                    await creditforNewUser(newUser)
+                }
+            }
+            
+
             delete req.session.otpUser.otp;
+
+            if (!userFound && user.referralCode) {
+                req.flash('warning', 'Registration success , Please login , Invalid referral code!')
+            } else {
+                req.flash('success', 'Registration success , Please login')
+            }
 
             res.redirect('/');
 
@@ -168,14 +200,36 @@ const verifyResendOTP = asyncHandler(async (req, res) => {
         console.log(storedOTP);
 
         const user = req.session.otpUser;
+        
 
         if (enteredOTP == storedOTP.otp) {
+            let userFound = null;
+            if (user.referralCode && user.referralCode !== '') {
+                const referralCode = user.referralCode.trim()
+                userFound = await creditforRefferedUser(referralCode)
+                delete user.referralCode
+            }
             console.log('inside verification');
             const newUser = await User.create(user);
             if (newUser) {
+                const referalCode = generateReferralCode(8)
+                const createWallet = await Wallet.create({ user: newUser._id })
+                newUser.wallet = createWallet._id
+                newUser.referralCode = referalCode;
+                newUser.save();
+                if (userFound) {
+                    await creditforNewUser(newUser._id)
+                }
                 console.log('new user insert in resend page', newUser);
             } else { console.log('error in insert user') }
             delete req.session.otpUser.otp;
+
+            if (!userFound && user.referralCode) {
+                req.flash('warning', 'Registration success , Please login , Invalid referral code!')
+            } else {
+                req.flash('success', 'Registration success , Please login')
+            }
+
             res.redirect('/');
         } else {
             console.log('verification failed');
@@ -212,130 +266,111 @@ const userLogout = async (req, res) => {
     }
 }
 
-
-// loading shop page---
-// const loadShop = async (req, res) => {
-//     try {
-//        const getalldata = await Product.find().populate("categoryName")
-    
-//         res.render('./user/pages/shop',{getalldata})
-//     } catch (error) {
-//         throw new Error(error)
-//     }
-// }
-
+//shoppage load----
 const loadShop = asyncHandler(async (req, res) => {
     console.log('request from unauth user ');
     try {
-        const user = req.user;
-        const page = req.query.p || 1;
-        const limit = 6;
-
-
-
-        const listedCategories = await Category.find({ isListed: true });
-        const categoryMapping = {};
-
-        listedCategories.forEach(category => {
-            categoryMapping[category.categoryName] = category._id;
-        });
-        const filter = { isListed: true };
-        let cat = '6528e157b4fe45ab5e23b889'
-        if (req.query.category) {
-            console.log(0);
-            // Check if the category name exists in the mapping
-            if (categoryMapping.hasOwnProperty(req.query.category)) {
-                filter.categoryName = categoryMapping[req.query.category];
-            } else {
-                filter.categoryName = cat
-            }
-        }
-
-        // Check if a search query is provided
-        if (req.query.search) {
-            filter.$or = [
-                { title: { $regex: req.query.search, $options: 'i' } },
-                
-            ];
-            // if search and category both included in the query parameters 
-            if (req.query.search && req.query.category) {
-                if (categoryMapping.hasOwnProperty(req.query.category)) {
-                    filter.categoryName = categoryMapping[req.query.category];
-                } else {
-                    filter.categoryName = cat
-                }
-            }
-        }
-
-        let sortCriteria = {};
-
-// Check for price sorting
-if (req.query.sort === 'lowtoHigh') {
-    
-
-    sortCriteria.salePrice = 1;
-} else if (req.query.sort === 'highToLow') {
-    sortCriteria.salePrice = -1;
-}
+       
         
-
-        //filter by both category and price
-        if (req.query.category && req.query.sort) {
-            console.log(2);
-            if (categoryMapping.hasOwnProperty(req.query.category)) {
-                filter.categoryName = categoryMapping[req.query.category];
-            } else {
-                filter.categoryName = cat
-            }
-
-            if (req.query.sort) {
-                sortCriteria.salePrice = 1;
-            }
-            if (req.query.sort === 'highToLow') {
-                sortCriteria.salePrice = -1;
-            }
+    const category=await Category.find({})
+     console.log(category)
+        const categories = Array.isArray(req.query.category) ? req.query.category : [req.query.category];
+        console.log(categories);
+        const priceRange = req.query.price || 'all';
+        const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
+      var search = '';
+      if (req.query.search) {
+          search = req.query.search;
+          console.log(search);
+      }
+      const sortBy=req.query.sortBy || 'priceLowToHigh';
+    
+        const userId=req.session.user_id
+        const user=await User.findById(userId)
+        
+        let minPrice=0
+        let maxPrice=Number.MAX_VALUE;
+        switch(priceRange){
+            case 'under25':
+                minPrice = 0;
+                maxPrice = 1000;
+                break;
+            case '25to50':
+                minPrice = 1000;
+                maxPrice = 2000;
+                break;
+            case '50to100':
+                minPrice = 2000;
+                maxPrice = 3000;
+                break;
+            case '100to200':
+                minPrice = 3000;
+                maxPrice = 4000;
+                break;
+            case '100above':
+                minPrice = 4000;
+                break;
+            default:
+               
+                break;
         }
+        
+        let sortQuery = {};
 
 
-        const findProducts = await Product.find(filter).populate('primaryImage')
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .sort(sortCriteria);
+    if (sortBy === 'priceLowToHigh') {
+      sortQuery = { price: 1 };
+    } else if (sortBy === 'priceHighToLow') {
+      sortQuery = { price: -1 };
+    }
+       
+const filter={
+    $or:[
+        {categoryName: { $in: categories.map(c => new RegExp(c, 'i')) } },
 
-        let userWishlist;
-        let cartProductIds;
-        if (user) {
-            if (user.cart || user.wishlist) {
-                cartProductIds = user.cart.map(cartItem => cartItem.product.toString());
-                userWishlist = user.wishlist;
-            }
+      
+    ],
+    salePrice: { $gte: minPrice, $lte: maxPrice },
+    color: { $in: colors.map(c => new RegExp(c, 'i')) },
 
-        } else {
-            cartProductIds = null;
-            userWishlist = false;
-        }
+};
+const searchFilter = {
+    $or: [
+        { title: { $regex: '.*' + search + '.*', $options: 'i' } },
+    
+       
+    ],
+};
 
-        const count = await Product.find(filter)
-            // { categoryName: { $in: listedCategoryIds }, isListed: true })
-            .countDocuments();
-        let selectedCategory = [];
-        if (filter.categoryName) {
-            selectedCategory.push(filter.categoryName)
-        }
-        console.log('selected cat', selectedCategory);
- const getalldata = await Product.find().populate("categoryName")
+const totalProducts = await Product.countDocuments({
+    $and: [
+        filter,
+        searchFilter,
+    ],
+});
 
-        res.render('./user/pages/shop', {
-            products: findProducts,
-            category: listedCategories,
-            cartProductIds,
+const adminData = await Product.find({
+    $and: [
+        filter,
+        searchFilter,
+    ],
+}).sort(sortQuery) ;
+console.log(adminData,"products i ")
+        const selectedCategories=categories;
+        const selectedPriceRange=priceRange;
+        selectedColors=colors
+        
+        res.render('./user/pages/shop', 
+        {
+            product: adminData,
             user,
-            userWishlist,
-            currentPage: page,
-            totalPages: Math.ceil(count / limit), // Calculating total pages
-            selectedCategory, 
-            getalldata
-        });
+            sortBy,
+            category,
+            selectedCategories,
+            selectedPriceRange,
+            selectedColors, 
+         })
+
     } catch (error) {
         throw new Error(error);
     }

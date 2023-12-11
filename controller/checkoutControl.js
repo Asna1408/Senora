@@ -85,7 +85,7 @@ const placeOrder = asyncHandler(async (req, res) => {
         const couponCode = req.session.coupon ? req.session.coupon.code : null;
         const coupon = (await Coupon.findOne({ code: couponCode, expiryDate: { $gt: Date.now() } })) || null;
         const newOrder = await checkoutHelper.placeOrder(userId, addressId, payment_method, isWallet,coupon);  // Use payment_method here
-
+        console.log(payment_method,"hiiiiiiiiiiiiiiiiiiiiiii")
         if (payment_method === "cash_on_delivery") {
             res.status(200).json({
                 message: "Order placed successfully",
@@ -109,6 +109,7 @@ const placeOrder = asyncHandler(async (req, res) => {
                     amount: wallet.balance,
                     type: "debit",
                 });
+             
             } else if (!isWallet) {
                 totalAmount = newOrder.totalPrice;
                 newOrder.paidAmount = totalAmount;
@@ -147,6 +148,7 @@ const placeOrder = asyncHandler(async (req, res) => {
                 //  Wallet payment redirect
                 const wallet = await Wallet.findOne({ user: userId });
                 wallet.balance -= newOrder.wallet;
+                console.log(wallet.balance,"wallet balance")
                 wallet.save();
                 newOrder.wallet = newOrder.totalPrice;
                 await newOrder.save();

@@ -31,8 +31,10 @@ var ProductSchema = new mongoose.Schema({
         required: true
     },
     categoryName:{  
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category' 
+        // type: mongoose.Schema.Types.ObjectId,
+        // ref: 'Category' 
+        type: String,
+        required: true, 
     },
     
     quantity: {

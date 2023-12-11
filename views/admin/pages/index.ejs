@@ -16,42 +16,59 @@
 
 
     <div class="row">
-        <div class="col-md-3 mb-3">
-            <div class="card text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total Sales</h5>
-                    <p class="card-text text-dark">
-                        Total Sales Amount: <br />
-                        <span class="text-success h3">₹ <%= totalSalesAmount %></span>
-                    </p>
-                </div>
+        <div class="col-lg-3">
+            <div class="card card-body mb-4">
+                <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                    <div class="text">
+                        <h6 class="mb-1 card-title">Total Sales</h6>
+                        Total Sales Amount:  <br />
+                        <span>₹ <%= totalSalesAmount %></span>
+                        
+                    </div>
+                </article>
             </div>
         </div>
-        
-        <div class="col-md-3 mb-3">
-            <div class="card text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Users</h5>
-                    <p class="card-text text-dark">
-                        Users Count: <br />
-                        <span class="text-primary h3">
-                            <%= totalActiveUserCount %>
-                        </span>
-                    </p>
-                </div>
+
+        <div class="col-lg-3">
+            <div class="card card-body mb-4">
+                <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                    <div class="text">
+                        <h6 class="mb-1 card-title">Total Products Sold</h6>
+                       Sold Count: <br />
+                        <span><%= totalSoldProducts %></span>
+                        
+                    </div>
+                </article>
             </div>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card text-dark">
-                <div class="card-body">
-                    <h5 class="card-title">Total Orders</h5>
-                    <p class="card-text text-dark">
-                        Total Orders Count: <br />
-                        <span class="text-success h3">
-                            <%= totalOrderCount %>
-                        </span>
-                    </p>
-                </div>
+
+        <div class="col-lg-3">
+            <div class="card card-body mb-4">
+                <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-person"></i></span>
+                    <div class="text">
+                        <h6 class="mb-1 card-title">Total Users</h6>
+                        Users Count: <br>
+                        <span>    <%= totalActiveUserCount %></span>
+                        
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="card card-body mb-4">
+                <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
+                    <div class="text">
+                        <h6 class="mb-1 card-title">Total Orders</h6>
+                        Total Orders Count: <br>
+                        <span>    <%= totalOrderCount %></span>
+                        
+                    </div>
+                </article>
             </div>
         </div>
     </div>
@@ -98,7 +115,7 @@
                     <div class="card-body">
                         <% recentOrders.forEach(order=> { %>
                             <div class="media mb-3">
-                                <img src="<%= order?.user?.image || "/assets/imgs/page/avaz.png" %>"
+                                <img src="<%= order?.user?.image || "/admin/assets/imgs/icons/profile-user.png" %>"
                                     class="mr-3 rounded-circle" alt="User Image" style="width: 60px" />
                                 <div class="media-body">
                                     <h5 class="mt-0">

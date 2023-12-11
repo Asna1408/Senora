@@ -59,17 +59,10 @@
                                     </h2>
                                     <div class="product-detail-rating">
 
-                                   <!--<div class="product-rate-cover text-end">
-                                            <div class="product-rate d-inline-block">
-                                                <div class="product-rating" >
-                                                    <span class="text-secondary"><%= `(${avgRating})` %></span>
-                                                </div>
-                                            </div>
-                                           
-                                        </div> -->
+                                 
                                         <div class="product-details-cati-tag mt-35">
                                             <ul>
-                                                <li class="categories-title">Category :<%= getalldata.categoryName.categoryName %></li>
+                                                <li class="categories-title">Category :<%= getalldata.categoryName %></li>
                                                 
                                                     <% if (getalldata.productPrice !== getalldata.salePrice) { %>
                                                         <li class="d-inline-block text-success ">
@@ -77,7 +70,8 @@
                                                                 <%= getalldata.categoryName.description %>
                                                             </strong>
                                                         </li>
-                                                        <% } %>
+                                                       
+                                                            <% } %>
                                             </ul>
                                         </div>
                                         
@@ -94,27 +88,22 @@
                                                 <span><%= reviews.length %> Ratings</span>
                                             </div>
                                         </div>
-                    
-                                       
-                
-
-
-
                                     </div>
+
+
+
                                     <div class="clearfix product-price-cover">
 
                                         <% if (getalldata.productPrice !==getalldata.salePrice) { %>
                                             <div class="product-price primary-color float-left">
                                                 <ins><span class="text-brand">₹<%= getalldata.salePrice %></span></ins>
                                                 <ins> <span class="old-price font-md ml-15">₹<%= getalldata.productPrice %>
-                                                            </span>  <% } %></ins>
-    
+                                                            </span>  <% }else{ %></ins>
+                                                                <div class="product-price primary-color float-left">
+                                                                    <ins><span class= "text-brand">₹<%= getalldata.productPrice %></span> </ins>
+                                                                     <% } %>
+                            
                                             </div>
-
-
-
-
-
                                     </div>
 
 
@@ -172,15 +161,14 @@
                                     </div> -->
                                     <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                                     <div class="detail-extralink">
-                                        <div class="detail-qty border radius">
-                                            <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                            <span class="qty-val">1</span>
-                                            <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                        </div>
+                                        
                                         <div class="product-extra-link2">
-                                            <a class="btn" href ="/add/<%= getalldata._id %>">Add to cart</a>
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"><i
-                                                    class="fi-rs-heart"></i></a>
+                                            <a aria-label="Add To Cart" class="action-btn hover-up"
+                                                    href="/add/<%= getalldata._id %>"><i
+                                                        class="fi-rs-shopping-bag-add"></i></a>
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                            href="#" id="addtoWishlist" onclick="addtoWishlist('<%= getalldata._id %>')"
+                                            ><i class="fi-rs-heart"></i></a>
                                         </div>
                                     </div>
 
@@ -201,7 +189,7 @@
                                                 <%= getalldata.brand %>
                                             </li>
                                             <li><span>Category</span>
-                                                <%= getalldata.categoryName.categoryName %>
+                                                <%= getalldata.categoryName%>
                                             </li>
                                             <li><span>Color</span>
                                                 <%= getalldata.color%>
@@ -292,3 +280,37 @@
         </div>
     </section>
 </main>
+
+<script>
+    function addtoWishlist(productID) {
+  
+  $.ajax({
+    url: '/my-wishlist/' + productID,
+    method: 'GET',
+  }).then(response => {
+    if (response.message) {
+      Swal.fire({
+        title: "Product Added",
+        text: "Product Added to Wishlist Successfully",
+        icon: "success",
+      }).then(() => {
+        console.log("Product Get Successfull");
+      })
+    } else if (response.exists) {
+      Swal.fire({
+        title: "Product Alredy Exists",
+        text: "Product is Alredy Present In Wishlist",
+      }).then(() => {
+        console.log("Product Alredy Exists in Wishlist");
+      });
+    } else {
+      Swal.fire({
+        title: "Product Add Failed",
+        text: "Something Went Wrong. Please Try Again",
+        icon: "error",
+      });
+    }
+  })
+  }
+  
+  </script>

@@ -23,6 +23,15 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
+    wallet: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Wallet' 
+    },
+    referralCode:{
+        type:String,
+        unique:true,
+    
+    },
     token:{
         type:String,
         default:''

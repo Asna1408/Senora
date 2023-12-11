@@ -1,29 +1,26 @@
 const mongoose = require('mongoose')
 
 const schedule = require("node-schedule")
-const { findByIdAndUpdate } = require('../models/usermodel');
-const { findOneAndUpdate } = require('../models/walletTransactionModel');
+const { findByIdAndUpdate } = require('./usermodel');
+const { findOneAndUpdate } = require('./walletTransactionModel');
 const Product = require('../models/productModel')
 
 const Schema = mongoose.Schema;
+
 const categorySchema = new Schema({
-    
-    categoryName:{
-        type:String,
-        required:true
-        
+    categoryName: {
+        type: String,
+        required: true
     },
-    
-    isListed:{ 
-        type:Boolean,
-        default:true
+    isListed: {
+        type: Boolean,
+        default: true
     },
     offer: Number,
-   
+    description: String,
     startDate: Date,
     endDate: Date,
-
-},{timestamps:true});
+}, { timestamps: true });
 
 
 
@@ -37,6 +34,7 @@ categorySchema.pre("save", async function (next) {
     }
 });
 
+const category = mongoose.model("Category", categorySchema);
 
 async function updateProductPrices(category) {
     const products = await Product.find({ categoryName: category._id });
@@ -67,5 +65,4 @@ schedule.scheduleJob(dailyScheduleRule, async () => {
     }
 });
 
-//Export the model
-module.exports = mongoose.model('Category', categorySchema);
+module.exports = category

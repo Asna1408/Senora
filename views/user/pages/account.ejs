@@ -74,6 +74,21 @@
                                         
                                         </div>
                                     </div>
+                                    <div class="mb-4">
+                                        <marquee direction="left">
+                                            <h2 class="h6 fw-bold text-success">Refer a friend and earn upto 30
+                                                cashback</h2>
+                                        </marquee>
+                                        <p class="lead">
+                                            <span id="referral-code">
+                                                <%= user.referralCode %>
+                                            </span>
+                                            <button class="btn btn-sm ml-2" id="copy-button">
+                                                <i class="fas fa-copy text-dark fa-sm mb-3" data-toggle="tooltip"
+                                                    data-placement="top"></i>
+                                            </button>
+                                        </p>
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
                                     <div class="card">
@@ -250,4 +265,20 @@
       const result = await response.json();
       console.log(result);
     }
+
+    
+
+    const copyButton = document.getElementById("copy-button")
+    copyButton.addEventListener("click", function () {
+        const codeToCopy = referralCode.textContent;
+        const textArea = document.createElement("textarea");
+        textArea.value = codeToCopy;
+        document.body.appendChild(textArea);
+        textArea.select();
+        textArea.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        copyButton.innerText = "Copied!";
+    });
+
   </script>

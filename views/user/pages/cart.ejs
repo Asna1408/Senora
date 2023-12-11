@@ -79,11 +79,6 @@
                               <%= totalProductPrice.toFixed(2) %>
                       </td>
 
-                      <td class="action" data-title="Remove">
-                        <a href="/remove/<%= product._id %>">
-                          <i class="fi-rs-trash"></i>
-                        </a>
-                      </td>
                     </tr>
                     <% }); %>
                       <% } else { %>
@@ -116,7 +111,8 @@
                         <td class="cart_total_label">Cart Subtotal</td>
                         <td class="cart_total_amount"><span>₹ <span id="subtotal">
                               <%= subtotal.toFixed(2) %>
-                            </span></span></td>
+                            </span></span></td> 
+
                       </tr> 
                       
                       <!-- <tr>

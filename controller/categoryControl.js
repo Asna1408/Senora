@@ -106,20 +106,15 @@ const editCategory = expressHandler(async (req, res) => {
 const updateCategory = expressHandler(async (req, res) => {
     try {
         const id = req.params.id
-        const updatedName = req.body.updatedName
-        const description = req.body.description;
-        const offer = req.body.offer
-        const startDate= req.body.startDate
-        const endDate = req.body.endDate
-
-       const cat = await category.findByIdAndUpdate(id, { $set: { categoryName: updatedName } })
-       cat.offer = offer;
+        const { updatedName, offer, description, startDate, endDate, } = req.body
+        const cat = await category.findById(id)
+        cat.categoryName = updatedName;
+        cat.offer = offer;
+        cat.description = description;
         cat.startDate = startDate;
         cat.endDate = endDate
-        cat.description = description;
         const saved = await cat.save()
-       
-       res.redirect('/admin/category')
+        res.redirect('/admin/category')
     } catch (error) {
         throw new Error(error)
     }
