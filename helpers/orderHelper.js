@@ -15,13 +15,6 @@ module.exports = {
     getOrders: asyncHandler(async (userId) => {
         const user = new mongoose.Types.ObjectId(userId)
         const orders = await Order.find({ user})
-// .populate(
-//     'orderItems'
-// )
-// console.log(orders[0])
-
-
-
 
             .populate({
                 path: "orderItems",
@@ -32,30 +25,9 @@ module.exports = {
                     
                 },
             })
-            // .select("orderId orderedDate shippingAddress city")
-            // .sort({ _id: -1 });
-
+          
         return orders;
-        // const orders= await Order.aggregate([
-        //     {
-        //         $match:{
-        //           user
-        //         }
-        //     },
-        // {
-        //     $lookup:{
-        //         from: 'products',
-        //         localField: 'product',
-        //         foreignField: '_id',
-        //         as: "productDetails",
-        //     }
-        // },
-        // {
-        //     $unwind:{
-         
-        //     }
-        // }
-        // ])
+       
         
     }),
 

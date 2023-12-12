@@ -88,7 +88,7 @@ app.use(errorHandler);
 
 
 // server setup--
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server Started on http://localhost:${process.env.PORT}`)
 })

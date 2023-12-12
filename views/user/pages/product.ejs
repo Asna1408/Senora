@@ -123,42 +123,6 @@
                                         </ul>
                                     </div>
 
-                                    
-
-
-                                    <!-- <div class="attr-detail attr-color mb-15">
-                                        <strong class="mr-10">Color</strong>
-                                        <ul class="list-filter color-filter">
-                                            <li><a href="#" data-color="Red"><span class="product-color-red"></span></a>
-                                            </li>
-                                            <li><a href="#" data-color="Yellow"><span
-                                                        class="product-color-yellow"></span></a></li>
-                                            <li class="active"><a href="#" data-color="White"><span
-                                                        class="product-color-white"></span></a></li>
-                                            <li><a href="#" data-color="Orange"><span
-                                                        class="product-color-orange"></span></a></li>
-                                            <li><a href="#" data-color="Cyan"><span
-                                                        class="product-color-cyan"></span></a></li>
-                                            <li><a href="#" data-color="Green"><span
-                                                        class="product-color-green"></span></a></li>
-                                            <li><a href="#" data-color="Purple"><span
-                                                        class="product-color-purple"></span></a></li>
-                                        </ul>
-                                    </div> -->
-                                    <!-- <div class="attr-detail attr-size">
-                                        <strong class="mr-10">Size</strong>
-                                        <ul class="list-filter size-filter font-small">
-                                            <li><a href="#">3</a></li>
-                                            <li class="active"><a href="#">4</a></li>
-                                            <li><a href="#">5</a></li>
-                                            <li><a href="#">6</a></li>
-                                            <li><a href="#">7</a></li>
-                                            <li><a href="#">8</a></li> 
- 
-                                            <li><a href="#">9</a></li>
-                                            <li><a href="#">10</a></li>
-                                        </ul>
-                                    </div> -->
                                     <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                                     <div class="detail-extralink">
                                         
@@ -229,33 +193,35 @@
                                 <div class="comments-area style-2">
                                     <div class="row">
                                         <div class="col-lg-8">
-                                            <h4 class="mb-30">Customer questions & answers</h4>
+                                            <h4 class="mb-30">Customer Review  (<%= reviews.length %> )</h4>
                                             <div class="comment-list">
 
+                                                <% if ( reviews.length <1) { %>
+                                                    <a href="#">Be the first to write your review!</a>
+                                                    <% } else { %>
 
                                                 <div class="single-comment justify-content-between d-flex">
                                                     <div class="user justify-content-between d-flex">
-                                                        <div class="thumb text-center">
-                                                            <img src="assets/imgs/page/avatar-6.jpg" alt="">
-                                                            <h6><a href="#">Jacky Chan</a></h6>
-                                                            <p class="font-xxs">Since 2012</p>
+
+                                                        <% reviews.forEach(review => { %>
+                                                        
+                                                            <div class="thumb text-center">
+                                                            <img src="<%= review?.user?.image || "/admin/assets/imgs/icons/profile-user.png" %>" alt="">
+                                                            <h6><a href="#"><%= review?.user?.userName %></a></h6>
+                                                       
                                                         </div>
                                                         <div class="desc">
-                                                            <div class="product-rate d-inline-block">
-                                                                <div class="product-rating" style="width:90%">
-                                                                </div>
-                                                            </div>
-                                                            <p>Thank you very fast shipping from Poland only 3days.</p>
-                                                            <div class="d-flex justify-content-between">
-                                                                <div class="d-flex align-items-center">
-                                                                    <p class="font-xs mr-30">December 4, 2020 at 3:12 pm </p>
-                                                                    <a href="#" class="text-brand btn-reply">Reply <i class="fi-rs-arrow-right"></i> </a>
-                                                                </div>
-                                                            </div>
+
+                                                            <span><%= review.rating %> Stars </span>
+                                                            <p><%= review.review %></p>
+                                                            
+                                                            
                                                         </div>
+                                                        <% }) %>
                                                     </div>
                                                 </div>
                                                
+                                                <% } %>
                                                 <!--single-comment -->
                                                 
                                                 <!--single-comment -->

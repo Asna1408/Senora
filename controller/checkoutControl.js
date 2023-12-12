@@ -10,6 +10,7 @@ const Coupon = require("../models/couponModel");
 const Razorpay = require("razorpay");
 const Wallet = require("../models/walletModel");
 const WalletTransaction = require("../models/walletTransactionModel");
+
 /**
  * Checkout Page Route
  * Method POST
@@ -85,6 +86,7 @@ const placeOrder = asyncHandler(async (req, res) => {
         const couponCode = req.session.coupon ? req.session.coupon.code : null;
         const coupon = (await Coupon.findOne({ code: couponCode, expiryDate: { $gt: Date.now() } })) || null;
         const newOrder = await checkoutHelper.placeOrder(userId, addressId, payment_method, isWallet,coupon);  // Use payment_method here
+        console.log(newOrder,"newOrder")
         console.log(payment_method,"hiiiiiiiiiiiiiiiiiiiiiii")
         if (payment_method === "cash_on_delivery") {
             res.status(200).json({
@@ -98,9 +100,11 @@ const placeOrder = asyncHandler(async (req, res) => {
 
             if (isWallet) {
                 totalAmount = newOrder.totalPrice;
-                totalAmount -= wallet.balance;
+                totalAmount -= wallet.balance || 0;
+                console.log(totalAmount,"totalamount")
                 newOrder.paidAmount = totalAmount;
                 newOrder.wallet = wallet.balance;
+                console.log(newOrder.wallet,"newOrderwallet")
                 await newOrder.save();
                 const walletTransaction = await WalletTransaction.create({
                     wallet: wallet._id,
@@ -149,6 +153,7 @@ const placeOrder = asyncHandler(async (req, res) => {
                 const wallet = await Wallet.findOne({ user: userId });
                 wallet.balance -= newOrder.wallet;
                 console.log(wallet.balance,"wallet balance")
+                console.log(newOrder.wallet,"neworder")
                 wallet.save();
                 newOrder.wallet = newOrder.totalPrice;
                 await newOrder.save();
@@ -200,7 +205,7 @@ const orderPlaced = asyncHandler(async (req, res) => {
         const userId = req.user.id;
 
         // Populate the order details, including product details
-        const order = await Order.findById(orderId).populate({
+        const order = await Order.findById(orderId).populate("wallet").populate({
             path: "orderItems",
             populate: {
                 path: "product",
@@ -227,7 +232,10 @@ const orderPlaced = asyncHandler(async (req, res) => {
             const wallet = await Wallet.findOne({ user: req.user._id });
          
             wallet.balance -= order.wallet;
+            console.log(order.wallet,"orderwallet")
+            console.log(wallet.balance,"wallet balance")
             await wallet.save();
+            
         } else if (order.payment_method === "wallet_payment") {
             for (const item of order.orderItems) {
                 item.isPaid = "paid";

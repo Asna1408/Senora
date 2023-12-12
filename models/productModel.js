@@ -76,11 +76,7 @@ var ProductSchema = new mongoose.Schema({
         type:Boolean,
         default:true
     },
-    // isDelete:{
-    //     type:Boolean,
-    //     default:false,
-    //     required:true,
-    // }
+    
 }, { timestamps: true });
 
 // Export the model

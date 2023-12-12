@@ -486,7 +486,7 @@ location.assign(`/order-placed?id=${responseData.orderId}`)
     }
 
     function handleWltPayment(responseData) {
-            window.location.href = `/order-placed/${responseData.orderId}`;
+            window.location.href = `/order-placed?id=${responseData.orderId}`;
         }
 
 
