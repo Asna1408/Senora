@@ -319,9 +319,9 @@ const loadShop = asyncHandler(async (req, res) => {
 
 
     if (sortBy === 'priceLowToHigh') {
-      sortQuery = { price: 1 };
+      sortQuery = { salePrice: 1 };
     } else if (sortBy === 'priceHighToLow') {
-      sortQuery = { price: -1 };
+      sortQuery = { salePrice: -1 };
     }
        
 const filter={
@@ -375,6 +375,10 @@ console.log(adminData,"products i ")
         throw new Error(error);
     }
 });
+
+
+
+
 
 
 // loading about page---
@@ -432,9 +436,9 @@ const loadProduct = async (req, res) => {
         } else {
             avgRating = 0;
         }
-        const getalldata = await Product.findOne({ _id: id }).populate("categoryName");
-        
-        res.render('./user/pages/product', { getalldata: getalldata ,reviews, avgRating});
+        const getalldata = await Product.findOne({ _id: id });
+        const getcategory = await Category.findOne({categoryName:getalldata.categoryName})
+        res.render('./user/pages/product', { getalldata: getalldata ,reviews, avgRating,getcategory});
     } catch (error) {
         throw new Error(error)
     }
@@ -740,6 +744,7 @@ module.exports = {
     forgetPswdload,
     resetPswd,
     addReview,
-    walletTransactionspage
+    walletTransactionspage,
+ 
 
 }

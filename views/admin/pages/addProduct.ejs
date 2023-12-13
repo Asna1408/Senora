@@ -53,7 +53,7 @@
                             <select class="form-select" name="categoryName" id="category" required>
                                 <option value="">Select category</option>
                                 <% catList.forEach(category=> { %>
-                                    <option value="<%= category?._id %>">
+                                    <option value="<%= category.categoryName %>">
                                         <%= category.categoryName %>
                                     </option>
                                     <% }) %>

@@ -131,7 +131,7 @@
 
                         <% for (let i=0; i < getalldata.length; i++) { %>
                             <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                                <div class="product-cart-wrap mb-xs-30">
+                                <div class="product-cart-wrap mb-30">
                                     <div class="product-img-action-wrap">
 
                                         <% for (let j=0; j < getalldata[i].primaryImage.length; j++) { %>
@@ -290,46 +290,6 @@
 </main>
 
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    function addtoCart() {
-        console.log("Funcion Called")
-
-        const productID = document.getElementById('productID').value;
-
-        Swal.fire({
-            title: "add this to cart ?",
-            text: "Are you sure to add this to cart?",
-            icon: "warning",
-            showCancelButton: true,
-            cancelButtonText: "No, Cancel",
-            confirmButtonText: "Yes, Proceed",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: "/addCart/" + productID,
-                    method: 'get',
-                    success: (response => {
-                        if (response.message) {
-                            Swal.fire({
-                                title: "Item Added ",
-                                text: "Item Added to Cart Successfully",
-                                icon: "success",
-                            }).then(() => {
-                                console.log("Successfull")
-                            })
-                        }
-                    })
-
-                });
-            }
-        })
-    }
-
-    res.status(200).json({ message: "Item Added Successfully" });
-
-
-</script> -->
 
 
 <script>

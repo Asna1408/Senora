@@ -35,6 +35,7 @@ userRoute.get('/account',ensureAuthenticated,userController.loadAccount);// load
 userRoute.get('/product',userController.loadProduct);
 
 
+
 // Login & Verification section---
 userRoute.get('/login', ensureNotAuthenticated, userController.loadLogin);
 userRoute.post('/login', ensureNotAuthenticated,

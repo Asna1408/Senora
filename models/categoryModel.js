@@ -37,7 +37,7 @@ categorySchema.pre("save", async function (next) {
 const category = mongoose.model("Category", categorySchema);
 
 async function updateProductPrices(category) {
-    const products = await Product.find({ categoryName: category._id });
+    const products = await Product.find({ categoryName: category.categoryName });
     const currentDate = new Date();
     if (category.offer && category.offer > 1 && category.startDate <= currentDate && currentDate <= category.endDate) {
         for (const product of products) {
