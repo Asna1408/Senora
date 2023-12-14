@@ -640,10 +640,13 @@ const forgetpswd = async (req, res) => {
 const forgetPswdload = async(req,res)=>{
 
     try {
-        const token =req.query.token;        
+        const token =req.query.token;       
+      
         const tokenData = await User.findOne({token:token})
+   
         if(tokenData){
             res.render('./user/pages/forget-password',{user_id :tokenData._id});
+            
 
         }else{
             res.render('./user/pages/404',{message:"Token is invalid"})

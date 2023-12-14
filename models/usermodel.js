@@ -30,7 +30,6 @@ const userSchema = new Schema({
     referralCode:{
         type:String,
         unique:true,
-    
     },
     token:{
         type:String,

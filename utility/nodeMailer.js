@@ -110,7 +110,7 @@ function sendVerifymail(name,email,token){
       <div class="content">
         <p>Dear ${name},</p>
         <p>Please click this link to reset the password process
-        <a href="http://127.0.0.1:3000/forget-password?token=${token}">Reset Password</a>
+        <a href="http://127.0.0.1:3001/forget-password?token=${token}">Reset Password</a>
         .</p>
       </div>
     </div>
