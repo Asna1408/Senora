@@ -78,15 +78,11 @@
                                                     <span class="old-price"><%= product[i].productPrice %></span>
                                                 </div>
                                                 <div class="product-action">
-                                                    <form class="add-to-cart-form"
-                                                        action="/addtoCart/<%= product[i]._id %>"
-                                                        method="post">
-                                                        <button  type="submit"   data-product-id="<%= product[i]._id %>" aria-label="Add to Cart" class="action-btn hover-up" style="height: 43px;
-                                                            position: relative;left: 65px;"><i class="fi-rs-shopping-bag-add"></i></button>
-                                                     
-                                                        <input type="number" value="1"
-                                                    12q         name="qty" style="display: none;">
-                                                    </form>
+                                                    <div class="product-action">
+                                                    <a aria-label="Add To Cart" class="action-btn hover-up"
+                                                    href="/add/<%= product[i]._id %>"><i
+                                                        class="fi-rs-shopping-bag-add"></i></a>
+                                        </div>
                                         </div>
                                             </div>
                                         </div>
@@ -149,25 +145,25 @@
                                     <input type="radio" id="price25to50" name="price"
                                     value="25to50" style="width: 14px;height:14px" <%=selectedPriceRange==='25to50'
                                     ? 'checked' : '' %>>
-                                    <label for="price25to50">₹2000 to ₹3000</label>
+                                    <label for="price25to50">₹1000 to ₹2000</label>
                                 </div>
                                 <div>
                                     <input type="radio" id="price50to100" name="price"
                                     value="50to100" style="width: 14px;height:14px"<%=selectedPriceRange==='50to100'
                                     ? 'checked' : '' %>>
-                                    <label for="price25to50">₹3000 to ₹4000</label>
+                                    <label for="price25to50">₹2000 to ₹3000</label>
                                 </div>
                                 <div>
                                     <input type="radio" id="price50to100" name="price"
                                     value="100to200" style="width: 14px;height:14px" <%=selectedPriceRange==='100to200'
                                     ? 'checked' : '' %>>
-                                    <label for="price100to200">₹4000 to 6000</label>
+                                    <label for="price100to200">₹3000 to 4000</label>
                                 </div>
                                 <div>
                                     <input type="radio" id="price200above" name="price"
                                     value="200above" style="width: 14px;height:14px" <%=selectedPriceRange==='200above'
                                     ? 'checked' : '' %>>
-                                    <label for="price200above"> ₹6000 & above</label>
+                                    <label for="price200above"> ₹4000 & above</label>
                                 </div>
                                 <div class="price-filter">
                                     <div class="price-filter-inner">
