@@ -37,8 +37,11 @@ Senora is a full-stack eCommerce web application built using EJS, Node.js, Expre
 - **User Profile:** Allow users to edit their profiles including password hashing using bcrypt.
 - **Invoice Download:** Users can download invoices for their orders.
 - **Responsive Design:** Mobile-friendly design for a seamless user experience.
-
+  
+## UserSIDE
 ![Screenshot_18-3-2024_145926_localhost](https://github.com/Asna1408/Senora/assets/85230276/cb2c4afa-20a4-47a0-b9f7-2316b4bfb17b)
+
+## AdminSIDE
 ![Screenshot_18-3-2024_15539_localhost](https://github.com/Asna1408/Senora/assets/85230276/0d7dc23b-567b-4453-867b-557bc7942890)
 
 
