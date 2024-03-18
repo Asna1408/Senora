@@ -29,7 +29,7 @@ Senora is a full-stack eCommerce web application built using EJS, Node.js, Expre
 - **OTP Verification:** Implemented nodemailer for OTP verification during user registration or sensitive actions.
 - **Referrals and Offers:** Users can refer others and avail product offers and discounts with coupons.
 - **Order Operations:** Ability to cancel and return orders.
-- **Wishlist Mangement:** Ability to add product to wishlist and remove it.
+- **Wishlist Mangement:** Ability to add product to wishlist and remove it.  
   **Cart Mangement:** Add product to cart and remove products.
 - **Banner Management:** Admin can manage banners and promotions.
 
